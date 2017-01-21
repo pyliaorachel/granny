@@ -3,6 +3,7 @@ import {
   View,
   Image,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 
 const neutralImage = require('../assets/emotions/neutral.png');
@@ -25,6 +26,14 @@ const emotionImages = {
   surprised: surprisedImage,
 };
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+const dimensions = {
+  grannyWidth: windowWidth - 50,
+  grannyHeight: (windowWidth - 50) * 606 / 483,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -32,8 +41,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageStyle: {
-    width: 300,
-    height: 300,
+    width: dimensions.grannyWidth,
+    height: dimensions.grannyHeight,
   },
 });
 

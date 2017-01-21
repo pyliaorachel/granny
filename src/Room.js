@@ -12,6 +12,7 @@ import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import TTS from 'react-native-tts';
 
 import Granny from './Granny';
+import * as colors from './utils/colors';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -25,7 +26,7 @@ const dimensions = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   preview: {
     height: dimensions.previewHeight,
@@ -167,8 +168,9 @@ export default class Room extends Component {
   }
 
   render() {
+    const containerStyle = StyleSheet.flatten([styles.container, {backgroundColor: colors[this.state.grannyEmotion]}]);
     return (
-      <View style={styles.container}>
+      <View style={containerStyle}>
         <Granny emotion={this.state.grannyEmotion}/>
         <Camera
           ref={(cam) => {
