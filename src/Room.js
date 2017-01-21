@@ -11,6 +11,8 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import TTS from 'react-native-tts';
 
+import Granny from './Granny';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -47,6 +49,7 @@ export default class Room extends Component {
       audioPath: '/dev/null',
       nextQuestion: false,
       ttsFinishListener: null,
+      grannyEmotion: 'neutral',
     };
 
     TTS.setDefaultLanguage('en-US');
@@ -125,6 +128,9 @@ export default class Room extends Component {
     console.log('nextQuestion');
 
     TTS.speak('Hello, Rachel! How are you?');
+    this.setState({
+      grannyEmotion: 'happy',
+    });
   }
 
   finishQuestion() {
@@ -155,7 +161,7 @@ export default class Room extends Component {
     DeviceEventEmitter.addListener('recordingProgress', this.captureSound);
 
     this.setState({
-      captureImageInterval: setInterval(this.captureImage, 5000),
+      captureImageInterval: setInterval(this.captureImage, 10000),
       ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
   }
@@ -163,6 +169,7 @@ export default class Room extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Granny emotion={this.state.grannyEmotion}/>
         <Camera
           ref={(cam) => {
             this.camera = cam;

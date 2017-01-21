@@ -26,6 +26,8 @@
 		9DF602AF712848CB8DF7F36E /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C71F34451B4701830B9A3F /* libRCTCamera.a */; };
 		92F42BE69CEA4F1EBF2A3772 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDDBD273A9C4AFA9499BAB2 /* libRNFetchBlob.a */; };
 		0D52499EDA204477AB7CCD2A /* libRNAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FFA3D30583B4540A9DAE8C8 /* libRNAudio.a */; };
+		FF6948AC51EE46B687BA992B /* libTextToSpeech.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E457ACE3AD3147DBA3385C73 /* libTextToSpeech.a */; };
+		1A508116332E4F94A7E3793E /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D4E16625B24573A57D8434 /* libRNSVG.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,6 +244,10 @@
 		BEDDBD273A9C4AFA9499BAB2 /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		50D738F1780645909E4537DC /* RNAudio.xcodeproj */ = {isa = PBXFileReference; name = "RNAudio.xcodeproj"; path = "../node_modules/react-native-audio/ios/RNAudio.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		0FFA3D30583B4540A9DAE8C8 /* libRNAudio.a */ = {isa = PBXFileReference; name = "libRNAudio.a"; path = "libRNAudio.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		0BFBECABCAB746659DA06B00 /* TextToSpeech.xcodeproj */ = {isa = PBXFileReference; name = "TextToSpeech.xcodeproj"; path = "../node_modules/react-native-tts/ios/TextToSpeech.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		E457ACE3AD3147DBA3385C73 /* libTextToSpeech.a */ = {isa = PBXFileReference; name = "libTextToSpeech.a"; path = "libTextToSpeech.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		12900F7A6BBF4B6CA1B5D50F /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		D3D4E16625B24573A57D8434 /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +277,8 @@
 				9DF602AF712848CB8DF7F36E /* libRCTCamera.a in Frameworks */,
 				92F42BE69CEA4F1EBF2A3772 /* libRNFetchBlob.a in Frameworks */,
 				0D52499EDA204477AB7CCD2A /* libRNAudio.a in Frameworks */,
+				FF6948AC51EE46B687BA992B /* libTextToSpeech.a in Frameworks */,
+				1A508116332E4F94A7E3793E /* libRNSVG.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +426,8 @@
 				3D6FC3E417C34C7CA0063503 /* RCTCamera.xcodeproj */,
 				F4640F98115D402782433258 /* RNFetchBlob.xcodeproj */,
 				50D738F1780645909E4537DC /* RNAudio.xcodeproj */,
+				0BFBECABCAB746659DA06B00 /* TextToSpeech.xcodeproj */,
+				12900F7A6BBF4B6CA1B5D50F /* RNSVG.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -844,6 +854,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -860,6 +872,8 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Granny.app/Granny";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
