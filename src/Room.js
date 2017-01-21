@@ -182,7 +182,8 @@ export default class Room extends Component {
     console.log(currentQuestion, totalQuestions, question);
 
     // TTS.speak(question);
-    const spokenText = await SpeechAndroid.startSpeech(questions, SpeechAndroid.US);
+    console.log(SpeechAndroid);
+    const spokenText = SpeechAndroid.startSpeech(question, SpeechAndroid.US);
     console.log(spokenText);
   }
 
