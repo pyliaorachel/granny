@@ -1,0 +1,50 @@
+{
+    "2017-01-21": [
+        {
+            "emotions": {
+                "happiness": "0.7",
+                "anxiety": "0.15",
+                "sadness": "0.15"
+            },
+            "time": {
+                "startTime": "2017-01-21T13:45:30",
+                "endTime": "2017-01-21T13:55:31"
+            }                
+        },
+        {
+            "emotions": {
+                "happiness": "0.7",
+                "anxiety": "0.15",
+                "sadness": "0.15"
+            },
+            "time": {
+                "startTime": "2017-01-21T13:45:30",
+                "endTime": "2017-01-21T13:55:31"
+            }                
+        }           
+    ],
+    "2017-01-22": [
+        {
+            "emotions": {
+                "happiness": "0.7",
+                "anxiety": "0.15",
+                "sadness": "0.15"
+            },
+            "time": {
+                "startTime": "2017-01-21T13:45:30",
+                "endTime": "2017-01-21T13:55:31"
+            }                
+        },
+        {
+            "emotions": {
+                "happiness": "0.7",
+                "anxiety": "0.15",
+                "sadness": "0.15"
+            },
+            "time": {
+                "startTime": "2017-01-21T13:45:30",
+                "endTime": "2017-01-21T13:55:31"
+            }                
+        }           
+    ]
+}
