@@ -10,11 +10,11 @@ import {
 import Camera from 'react-native-camera';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
-import TTS from 'react-native-tts';
 
 import Granny from './Granny';
 import * as colors from './utils/colors';
 import * as Animatable from 'react-native-animatable';
+import SpeechAndroid from 'react-native-android-voice';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -90,9 +90,6 @@ export default class Room extends Component {
       currentQuestion: 0,
       totalQuestions: questions.length,
     };
-
-    TTS.setDefaultLanguage('en-US');
-    TTS.setDefaultRate(0.4);
 
     this.captureImage = this.captureImage.bind(this);
     this.captureBackground = this.captureBackground.bind(this);
@@ -184,7 +181,9 @@ export default class Room extends Component {
     });
     console.log(currentQuestion, totalQuestions, question);
 
-    TTS.speak(question);
+    // TTS.speak(question);
+    const spokenText = await SpeechAndroid.startSpeech(questions, SpeechAndroid.US);
+    console.log(spokenText);
   }
 
   finishQuestion() {
@@ -276,7 +275,7 @@ export default class Room extends Component {
     this.setState({
       setup: false,
       captureImageInterval: setInterval(this.captureImage, 3000),
-      ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
+      // ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
   }
 
