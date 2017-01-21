@@ -29,13 +29,13 @@ const dimensions = {
 };
 
 const jumpingGrannyImage = require('../assets/opening/jumping-granny.png');
+const questions = require('../assets/questions.json').questions;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors['neutral'],
   },
   preview: {
     height: dimensions.previewHeight,
@@ -47,10 +47,11 @@ const styles = StyleSheet.create({
   jumpingGrannyStyle: {
     width: dimensions.jumpingGrannyWidth,
     height: dimensions.jumpingGrannyHeight,
+    marginTop: 10,
+    marginBottom: 10,
   },
   grannyTextStyle: {
-    fontSize: 30,
-    marginBottom: 20,
+    fontSize: 34,
     color: 'white',
   },
 });
@@ -60,7 +61,22 @@ export default class Room extends Component {
   constructor(props) {
     super(props);
 
+    const startTime = new Date();
+    const key = `${startTime.getFullYear()}-${startTime.getMonth()}-${startTime.getDate()}`;
+
     this.state = {
+      emotionData: {
+        happiness: 0,
+        anger: 0,
+        fear: 0,
+        surprise: 0,
+        contempt: 0,
+        disgust: 0,
+        neutral: 0,
+        sadness: 0,
+      },
+      startTime,
+      key,
       setup: true,
       captureImageInterval: null,
       cntCaptureSound: 0,
@@ -71,10 +87,12 @@ export default class Room extends Component {
       ttsFinishListener: null,
       grannyEmotion: 'neutral',
       containerStyle: StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}]),
+      currentQuestion: 0,
+      totalQuestions: questions.length,
     };
 
     TTS.setDefaultLanguage('en-US');
-    TTS.setDefaultRate(0.6);
+    TTS.setDefaultRate(0.4);
 
     this.captureImage = this.captureImage.bind(this);
     this.captureBackground = this.captureBackground.bind(this);
@@ -84,12 +102,12 @@ export default class Room extends Component {
   }
 
   componentDidMount() {
-      this.prepareRecordingPath(this.state.audioPath);
-      DeviceEventEmitter.addListener('recordingProgress', this.captureBackground);
+    this.prepareRecordingPath(this.state.audioPath);
+    DeviceEventEmitter.addListener('recordingProgress', this.captureBackground);
 
-      AudioRecorder.startRecording();
+    AudioRecorder.startRecording();
 
-      this.setupAnimation();
+    this.setupAnimation();
   }
 
   componentWillUnmount() {
@@ -112,7 +130,7 @@ export default class Room extends Component {
   }
 
   captureBackground(data) {
-    console.log('bg', data, this.state.background);
+    //console.log('bg', data, this.state.background);
 
     const background = (data.currentTime !== 0) ? (this.state.background * this.state.cntCaptureSound + data.maxAmplitude) / data.currentTime : 0;
 
@@ -146,17 +164,27 @@ export default class Room extends Component {
 
       if (nextQuestion) this.nextQuestion();
     }
+    if (data.currentTime >= 100) {
+      this.endTalk();
+    }
   }
 
   nextQuestion() {
     console.log('nextQuestion');
+    const { currentQuestion, totalQuestions } = this.state;
 
-    TTS.speak('Hello, Rachel! How are you?');
-    if (this.state.grannyEmotion === 'happy') {
-      this.changeEmotion('neutral');
-    } else {
-      this.changeEmotion('happy');
+    if (currentQuestion >= totalQuestions) {
+      this.endTalk();
+      return;
     }
+
+    const question = questions[this.state.currentQuestion];
+    this.setState({
+      currentQuestion: this.state.currentQuestion+1,
+    });
+    console.log(currentQuestion, totalQuestions, question);
+
+    TTS.speak(question);
   }
 
   finishQuestion() {
@@ -166,7 +194,37 @@ export default class Room extends Component {
     });
   }
 
+  endTalk() {
+    console.log('endTalk');
+    clearInterval(this.state.captureImageInterval);
+    AudioRecorder.stopRecording();
+
+    const endTime = new Date().toISOString();
+
+    // normalize emotion
+    const emotionData = this.state.emotionData;
+    let sum = 0;
+    Object.keys(emotionData).forEach((key) => {
+      sum += emotionData[key];
+    });
+    Object.keys(emotionData).forEach((key) => {
+      emotionData[key] = emotionData[key] / sum;
+    });
+
+    // parse data
+    const data = {
+      emotions: emotionData,
+      time: {
+        startTime: this.state.startTime.toISOString(),
+        endTime,
+      }
+    };
+
+    console.log(this.state.key, data);
+  }
+
   changeEmotion(emotion) {
+    console.log(emotion);
     this.setState({
       grannyEmotion: emotion,
     });
@@ -180,7 +238,30 @@ export default class Room extends Component {
           'Content-Type' : 'application/octet-stream',
         }, data.data)
         .then((res) => {
-          //console.log(res.text());
+          console.log(JSON.parse(res.text()));
+          const data = JSON.parse(res.text());
+          const emotionData = this.state.emotionData;
+
+          data.forEach((record) => {
+            const scores = record.scores;
+            this.setState({
+              emotionData: {
+                happiness: emotionData.happiness + scores.happiness,
+                anger: emotionData.anger + scores.anger,
+                fear: emotionData.fear + scores.fear,
+                surprise: emotionData.surprise + scores.surprise,
+                contempt: emotionData.contempt + scores.contempt,
+                disgust: emotionData.disgust + scores.disgust,
+                neutral: emotionData.neutral + scores.neutral,
+                sadness: emotionData.sadness + scores.sadness,
+              },
+            });
+            const maxKey = Object.keys(scores).reduce(function(a, b){ return scores[a] > scores[b] ? a : b });
+            if (scores[maxKey] !== 0 && maxKey !== this.state.grannyEmotion) {
+              this.changeEmotion(maxKey);
+            }
+          });
+          console.log(emotionData);
         })
         .catch((err) => console.log('Error: ', err));
       })
@@ -194,21 +275,23 @@ export default class Room extends Component {
 
     this.setState({
       setup: false,
-      captureImageInterval: setInterval(this.captureImage, 10000),
+      captureImageInterval: setInterval(this.captureImage, 3000),
       ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
   }
 
   render() {
-    const containerStyle = StyleSheet.flatten([styles.container, {backgroundColor: colors[this.state.grannyEmotion]}]);
     return (
       this.state.setup ?
-        <View style={styles.container}>
-          <Text style={styles.grannyTextStyle}>Granny is coming!</Text>
+        <View style={StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}])}>
+          <Text style={styles.grannyTextStyle}>KEEP CALM</Text>
+          <Text style={styles.grannyTextStyle}>AND</Text>
           <Animatable.Image animation='bounce' duration={1500} iterationCount='infinite' style={styles.jumpingGrannyStyle} source={jumpingGrannyImage}/>
+          <Text style={styles.grannyTextStyle}>WAIT FOR</Text>
+          <Text style={styles.grannyTextStyle}>GRANNY</Text>
         </View>
       :
-        <View style={containerStyle}>
+        <View style={StyleSheet.flatten([styles.container, {backgroundColor: colors[this.state.grannyEmotion]}])}>
           <Granny emotion={this.state.grannyEmotion}/>
           <Camera
             ref={(cam) => {

@@ -21,9 +21,9 @@ const emotionImages = {
   contempt: contemptImage,
   disgust: disgustImage,
   fear: fearImage,
-  happy: happyImage,
-  sad: sadImage,
-  surprised: surprisedImage,
+  happiness: happyImage,
+  sadness: sadImage,
+  surprise: surprisedImage,
 };
 
 const windowWidth = Dimensions.get('window').width;
@@ -67,7 +67,6 @@ export default class Granny extends Component {
   }
 
   renderGranny() {
-    console.log('renderGranny');
     return (<
       Image style={styles.imageStyle} source={this.state.image}
     />);
