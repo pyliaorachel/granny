@@ -9,6 +9,7 @@ import {
 import Camera from 'react-native-camera';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
+import TTS from 'react-native-tts';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -45,12 +46,17 @@ export default class Room extends Component {
       background: 0,
       audioPath: '/dev/null',
       nextQuestion: false,
+      ttsFinishListener: null,
     };
+
+    TTS.setDefaultLanguage('en-US');
+    TTS.setDefaultRate(0.6);
 
     this.captureImage = this.captureImage.bind(this);
     this.captureBackground = this.captureBackground.bind(this);
     this.captureSound = this.captureSound.bind(this);
     this.startTalk = this.startTalk.bind(this);
+    this.finishQuestion = this.finishQuestion.bind(this);
   }
 
   componentDidMount() {
@@ -118,12 +124,14 @@ export default class Room extends Component {
   nextQuestion() {
     console.log('nextQuestion');
 
-    setTimeout(() => {
-      console.log('?');
-      this.setState({
-        nextQuestion: false,
-      });
-    }, 3000);
+    TTS.speak('Hello, Rachel! How are you?');
+  }
+
+  finishQuestion() {
+    console.log('finishQuestion');
+    this.setState({
+      nextQuestion: false,
+    });
   }
 
   captureImage() {
@@ -147,7 +155,8 @@ export default class Room extends Component {
     DeviceEventEmitter.addListener('recordingProgress', this.captureSound);
 
     this.setState({
-      captureImageInterval: setInterval(this.captureImage, 5000)
+      captureImageInterval: setInterval(this.captureImage, 5000),
+      ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
   }
 
