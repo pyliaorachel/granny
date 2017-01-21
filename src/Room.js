@@ -5,6 +5,7 @@ import {
   View,
   Dimensions,
   DeviceEventEmitter,
+  Image,
 } from 'react-native';
 import Camera from 'react-native-camera';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -13,6 +14,7 @@ import TTS from 'react-native-tts';
 
 import Granny from './Granny';
 import * as colors from './utils/colors';
+import * as Animatable from 'react-native-animatable';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,11 +24,18 @@ const dimensions = {
   previewHeight: windowWidth / 4,
   previewMarginRight: windowWidth / 15,
   previewMarginBottom: windowWidth / 15,
+  jumpingGrannyWidth: windowWidth / 4,
+  jumpingGrannyHeight: windowWidth * 537 / (4 * 253),
 };
+
+const jumpingGrannyImage = require('../assets/opening/jumping-granny.png');
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors['neutral'],
   },
   preview: {
     height: dimensions.previewHeight,
@@ -34,6 +43,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: dimensions.previewMarginRight,
     bottom: dimensions.previewMarginBottom,
+  },
+  jumpingGrannyStyle: {
+    width: dimensions.jumpingGrannyWidth,
+    height: dimensions.jumpingGrannyHeight,
+  },
+  grannyTextStyle: {
+    fontSize: 30,
+    marginBottom: 20,
+    color: 'white',
   },
 });
 
@@ -43,6 +61,7 @@ export default class Room extends Component {
     super(props);
 
     this.state = {
+      setup: true,
       captureImageInterval: null,
       cntCaptureSound: 0,
       cummulatedBelowBackground: 0,
@@ -51,6 +70,7 @@ export default class Room extends Component {
       nextQuestion: false,
       ttsFinishListener: null,
       grannyEmotion: 'neutral',
+      containerStyle: StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}]),
     };
 
     TTS.setDefaultLanguage('en-US');
@@ -69,14 +89,13 @@ export default class Room extends Component {
 
       AudioRecorder.startRecording();
 
-      setTimeout(this.startTalk, 10000);
+      this.setupAnimation();
   }
 
   componentWillUnmount() {
     clearInterval(this.state.captureImageInterval);
     AudioRecorder.stopRecording();
   }
-
 
   prepareRecordingPath(audioPath){
     AudioRecorder.prepareRecordingAtPath(audioPath, {
@@ -86,6 +105,10 @@ export default class Room extends Component {
       AudioEncoding: "aac",
       AudioEncodingBitRate: 32000,
     });
+  }
+
+  setupAnimation() {
+    setTimeout(this.startTalk, 10000);
   }
 
   captureBackground(data) {
@@ -129,15 +152,23 @@ export default class Room extends Component {
     console.log('nextQuestion');
 
     TTS.speak('Hello, Rachel! How are you?');
-    this.setState({
-      grannyEmotion: 'happy',
-    });
+    if (this.state.grannyEmotion === 'happy') {
+      this.changeEmotion('neutral');
+    } else {
+      this.changeEmotion('happy');
+    }
   }
 
   finishQuestion() {
     console.log('finishQuestion');
     this.setState({
       nextQuestion: false,
+    });
+  }
+
+  changeEmotion(emotion) {
+    this.setState({
+      grannyEmotion: emotion,
     });
   }
 
@@ -162,6 +193,7 @@ export default class Room extends Component {
     DeviceEventEmitter.addListener('recordingProgress', this.captureSound);
 
     this.setState({
+      setup: false,
       captureImageInterval: setInterval(this.captureImage, 10000),
       ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
@@ -170,18 +202,24 @@ export default class Room extends Component {
   render() {
     const containerStyle = StyleSheet.flatten([styles.container, {backgroundColor: colors[this.state.grannyEmotion]}]);
     return (
-      <View style={containerStyle}>
-        <Granny emotion={this.state.grannyEmotion}/>
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
-          style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}
-          type={Camera.constants.Type.front}
-          captureTarget={Camera.constants.CaptureTarget.memory}>
-        </Camera>
-      </View>
+      this.state.setup ?
+        <View style={styles.container}>
+          <Text style={styles.grannyTextStyle}>Granny is coming!</Text>
+          <Animatable.Image animation='bounce' duration={1500} iterationCount='infinite' style={styles.jumpingGrannyStyle} source={jumpingGrannyImage}/>
+        </View>
+      :
+        <View style={containerStyle}>
+          <Granny emotion={this.state.grannyEmotion}/>
+          <Camera
+            ref={(cam) => {
+              this.camera = cam;
+            }}
+            style={styles.preview}
+            aspect={Camera.constants.Aspect.fill}
+            type={Camera.constants.Type.front}
+            captureTarget={Camera.constants.CaptureTarget.memory}>
+          </Camera>
+        </View>
     );
   }
 }
