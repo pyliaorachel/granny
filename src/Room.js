@@ -11,6 +11,7 @@ import Camera from 'react-native-camera';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import TTS from 'react-native-tts';
+import { Actions } from 'react-native-router-flux'
 
 import Granny from './Granny';
 import * as colors from './utils/colors';
@@ -147,9 +148,9 @@ export default class Room extends Component {
     let nextQuestion = this.state.nextQuestion;
 
     if (!nextQuestion) { // Granny is not asking a question
-      if (data.maxAmplitude < this.state.background) {
+      if (data.maxAmplitude < this.state.background+2000) { // offset 2000 for sake
         cummulatedBelowBackground++;
-        if (cummulatedBelowBackground >= 3) {
+        if (cummulatedBelowBackground >= 4) {
           nextQuestion = true;
           cummulatedBelowBackground = 0;
         }
@@ -220,6 +221,7 @@ export default class Room extends Component {
     };
 
     console.log(this.state.key, data);
+    Actions.report({data, dataKey: this.state.key});
   }
 
   changeEmotion(emotion) {
