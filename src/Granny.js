@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 const neutralImage = require('../assets/emotions/neutral.png');
 const angerImage = require('../assets/emotions/anger.png');
@@ -74,9 +75,9 @@ export default class Granny extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <Animatable.View animation='bounce' duration={1500} iterationCount='infinite' style={styles.container}>
         {this.renderGranny()}
-      </View>
+      </Animatable.View>
     );
   }
 }

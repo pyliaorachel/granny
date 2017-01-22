@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: dimensions.previewMarginRight,
     bottom: dimensions.previewMarginBottom,
+    opacity: 0,
   },
   jumpingGrannyStyle: {
     width: dimensions.jumpingGrannyWidth,
@@ -217,11 +218,14 @@ export default class Room extends Component {
       time: {
         startTime: this.state.startTime.toISOString(),
         endTime,
+        day: this.state.startTime.getDay(),
       }
     };
 
     console.log(this.state.key, data);
-    Actions.report({data, dataKey: this.state.key});
+    setTimeout(() => {
+      Actions.report({data, dataKey: this.state.key});
+    }, 3000);
   }
 
   changeEmotion(emotion) {

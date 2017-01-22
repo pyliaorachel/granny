@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import net.no_mad.tts.TextToSpeechPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SvgPackage(),
             new TextToSpeechPackage(),
             new ReactNativeAudioPackage(),
             new RNFetchBlobPackage(), new RCTCameraPackage()
