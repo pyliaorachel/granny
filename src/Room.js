@@ -164,9 +164,6 @@ export default class Room extends Component {
 
       if (nextQuestion) this.nextQuestion();
     }
-    if (data.currentTime >= 100) {
-      this.endTalk();
-    }
   }
 
   nextQuestion() {
@@ -198,6 +195,8 @@ export default class Room extends Component {
     console.log('endTalk');
     clearInterval(this.state.captureImageInterval);
     AudioRecorder.stopRecording();
+
+    TTS.speak('Nice to chat with you! See you next time.');
 
     const endTime = new Date().toISOString();
 
@@ -278,6 +277,8 @@ export default class Room extends Component {
       captureImageInterval: setInterval(this.captureImage, 3000),
       ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
+
+    this.nextQuestion();
   }
 
   render() {
@@ -297,6 +298,7 @@ export default class Room extends Component {
             ref={(cam) => {
               this.camera = cam;
             }}
+            playSoundOnCapture={false}
             style={styles.preview}
             aspect={Camera.constants.Aspect.fill}
             type={Camera.constants.Type.front}
