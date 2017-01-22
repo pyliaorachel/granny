@@ -183,7 +183,7 @@ export default class Room extends Component {
 
     // TTS.speak(question);
     console.log(SpeechAndroid);
-    const spokenText = SpeechAndroid.startSpeech(question, SpeechAndroid.US);
+    const spokenText = SpeechAndroid.startSpeech(questions, SpeechAndroid.US);
     console.log(spokenText);
   }
 
@@ -290,7 +290,7 @@ export default class Room extends Component {
           <Text style={styles.grannyTextStyle}>WAIT FOR</Text>
           <Text style={styles.grannyTextStyle}>GRANNY</Text>
         </View>
-      :
+        :
         <View style={StyleSheet.flatten([styles.container, {backgroundColor: colors[this.state.grannyEmotion]}])}>
           <Granny emotion={this.state.grannyEmotion}/>
           <Camera
