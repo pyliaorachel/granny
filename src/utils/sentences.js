@@ -1,5 +1,5 @@
 module.exports = {
-  happiness: 'Dear, that\'s wonderful, I hope you continue to have many good days to come.',
+  happiness: 'Dear, that\'s wonderful! I hope you continue to have many good days to come.',
   anger: 'Oh dear, you had a bad experience, but there were moments to appreciate.',
   fear: 'Oh dear, you had a bad experience, but there were moments to appreciate.',
   surprise: 'Oh dear, you had a bad experience, but there were moments to appreciate.',
@@ -7,4 +7,5 @@ module.exports = {
   disgust: 'Oh dear, you had a bad experience, but there were moments to appreciate.',
   neutral: 'Dear, that\'s wonderful, I hope you continue to have many good days to come.',
   sadness: 'Oh dear, you had a bad experience, but there were moments to appreciate.',
+  error: 'Oh dear, Granny has trouble reading your face. Next time, can you show me your nice and clear face?'
 };

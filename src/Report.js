@@ -10,17 +10,18 @@ import PieChart from './PieChart';
 import * as emotionList from './utils/emotionList';
 import Legends from './Legends';
 import * as sentences from './utils/sentences';
-import { weekdayNames as weekdays } from './utils/weekdayNames'
+import { weekdayNames as weekdays, monthNamesShort as months } from './utils/timeNames'
+import { report_const } from './utils/constants'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    padding: 40,
+    padding: 30,
   },
   timeTextStyle: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#aaaaaa',
   },
   sentenceStyle: {
@@ -28,57 +29,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const defaultRawData = {
-  'emotions': {
-    'happiness': '1.5',
-    'sadness': '0.15',
-    'anger': '0.1',
-    'fear': '0.1',
-    'surprise': '0.1',
-    'contempt': '0.1',
-    'disgust': '0.1',
-    'neutral': '0.1',
-  },
-  'time': {
-    'startTime': '2017-02-21T13:45:30',
-    'endTime': '2017-02-21T13:55:31'
-  }
-};
-
-const defaultData = [{
-  'name': 'happiness',
-  'score': 0.1
-}, {
-  'name': 'anger',
-  'score': 0.1
-}, {
-  'name': 'fear',
-  'score': 0.2
-}, {
-  'name': 'surprise',
-  'score': 0.2
-}, {
-  'name': 'contempt',
-  'score': 0.1
-}, {
-  'name': 'disgust',
-  'score': 0.1
-}, {
-  'name': 'neutral',
-  'score': 0.1
-}, {
-  'name': 'sadness',
-  'score': 0.1
-}];
-
 export default class Report extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: props.data || defaultRawData,
+      data: props.data || report_const.DEFAULT_DATA,
       key: props.dataKey,
-      parsedData: defaultData,
+      parsedData: report_const.DEFAULT_PARSED_DATA,
       day: (props.data && weekdays[props.data.time.day]) || 'Monday',
       timeString: null,
       maxEmotion: 'neutral',
@@ -89,13 +47,13 @@ export default class Report extends Component {
     const emotions = emotionList.emotions;
     const dataEmotions = this.state.data.emotions;
 
-    const parsedData = [];
+    let parsedData = [];
     let max = -1;
     let maxEmotion = '';
     emotions.forEach((emotion) => {
       const part = {
-        "name": emotion,
-        "score": parseFloat(dataEmotions[emotion]),
+        'name': emotion,
+        'score': parseFloat(dataEmotions[emotion]),
       };
       parsedData.push(part);
       if (parseFloat(dataEmotions[emotion]) > max) {
@@ -104,8 +62,12 @@ export default class Report extends Component {
       }
     });
 
+    if (this.props.data && this.props.data.error) {
+      maxEmotion = 'error';
+    }
+
     const startTime = new Date(this.state.data.time.startTime);
-    const timeString = `${startTime.getDate()} ${startTime.getMonth()+1} ${startTime.getFullYear()}`;
+    const timeString = `${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
 
     this.setState({
       parsedData,
@@ -115,16 +77,16 @@ export default class Report extends Component {
   }
 
   render() {
+    const { day, timeString, maxEmotion, parsedData } = this.state;
     return (
       <View style={styles.container}>
-        <View style={{flex: 0.15}}>
-          <Text style={styles.timeTextStyle}>{this.state.day}</Text>
-          <Text style={styles.timeTextStyle}>{this.state.timeString}</Text>
+        <View style={{flex: 0.1}}>
+          <Text style={styles.timeTextStyle}>{day}, {timeString}</Text>
         </View>
-        <View style={{flex: 0.25}}>
-          <Text style={styles.sentenceStyle}>{sentences[this.state.maxEmotion]}</Text>
+        <View style={{flex: 0.2}}>
+          <Text style={styles.sentenceStyle}>{sentences[maxEmotion]}</Text>
         </View>
-        <PieChart data={this.state.parsedData} />
+        <PieChart data={parsedData} />
         <Legends />
       </View>
     );
