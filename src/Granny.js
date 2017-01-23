@@ -3,9 +3,10 @@ import {
   View,
   Image,
   StyleSheet,
-  Dimensions,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+
+import { granny_const, env_const } from './utils/constants';
 
 const neutralImage = require('../assets/emotions/neutral.png');
 const angerImage = require('../assets/emotions/anger.png');
@@ -27,8 +28,8 @@ const emotionImages = {
   surprise: surprisedImage,
 };
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = env_const.WINDOW_WIDTH;
+const windowHeight = env_const.WINDOW_HEIGHT;
 
 const dimensions = {
   grannyWidth: windowWidth - 50,
@@ -75,7 +76,7 @@ export default class Granny extends Component {
 
   render() {
     return (
-      <Animatable.View animation='bounce' duration={1500} iterationCount='infinite' style={styles.container}>
+      <Animatable.View animation='bounce' duration={granny_const.BOUNCING_DURATION} iterationCount='infinite' style={styles.container}>
         {this.renderGranny()}
       </Animatable.View>
     );

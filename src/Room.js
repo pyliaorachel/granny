@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   DeviceEventEmitter,
   Image,
 } from 'react-native';
@@ -12,13 +11,14 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import TTS from 'react-native-tts';
 import { Actions } from 'react-native-router-flux'
+import * as Animatable from 'react-native-animatable';
 
 import Granny from './Granny';
 import * as colors from './utils/colors';
-import * as Animatable from 'react-native-animatable';
+import { interval_const, timeout_const, config_const, granny_const, env_const } from './utils/constants';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = env_const.WINDOW_WIDTH;
+const windowHeight = env_const.WINDOW_HEIGHT;
 
 const dimensions = {
   previewWidth: windowWidth / 4,
@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
   jumpingGrannyStyle: {
     width: dimensions.jumpingGrannyWidth,
     height: dimensions.jumpingGrannyHeight,
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
   },
   grannyTextStyle: {
-    fontSize: 34,
+    fontSize: 46,
     color: 'white',
   },
 });
@@ -84,8 +84,8 @@ export default class Room extends Component {
       cntCaptureSound: 0,
       cummulatedBelowBackground: 0,
       background: 0,
-      audioPath: '/dev/null',
-      nextQuestion: false,
+      audioPath: config_const.AUDIO_FILE_PATH,
+      nextQuestion: true,
       ttsFinishListener: null,
       grannyEmotion: 'neutral',
       containerStyle: StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}]),
@@ -93,8 +93,8 @@ export default class Room extends Component {
       totalQuestions: questions.length,
     };
 
-    TTS.setDefaultLanguage('en-US');
-    TTS.setDefaultRate(0.4);
+    TTS.setDefaultLanguage(config_const.TTS_DEFAULT_LANG);
+    TTS.setDefaultRate(config_const.TTS_DEFAULT_RATE);
 
     this.captureImage = this.captureImage.bind(this);
     this.captureBackground = this.captureBackground.bind(this);
@@ -118,23 +118,19 @@ export default class Room extends Component {
   }
 
   prepareRecordingPath(audioPath){
-    AudioRecorder.prepareRecordingAtPath(audioPath, {
-      SampleRate: 22050,
-      Channels: 1,
-      AudioQuality: "Low",
-      AudioEncoding: "aac",
-      AudioEncodingBitRate: 32000,
-    });
+    AudioRecorder.prepareRecordingAtPath(audioPath, config_const.AUDIO_OPTIONS);
   }
 
   setupAnimation() {
-    setTimeout(this.startTalk, 10000);
+    setTimeout(this.startTalk, timeout_const.OPENING_TIMEOUT);
   }
 
   captureBackground(data) {
     //console.log('bg', data, this.state.background);
 
-    const background = (data.currentTime !== 0) ? (this.state.background * this.state.cntCaptureSound + data.maxAmplitude) / data.currentTime : 0;
+    const background = (data.currentTime !== 0)
+      ? (this.state.background * this.state.cntCaptureSound + data.maxAmplitude) / data.currentTime
+      : 0;
 
     this.setState({
       cntCaptureSound: data.currentTime,
@@ -149,9 +145,9 @@ export default class Room extends Component {
     let nextQuestion = this.state.nextQuestion;
 
     if (!nextQuestion) { // Granny is not asking a question
-      if (data.maxAmplitude < this.state.background + 3000) { // offset 3000 for sake
+      if (data.maxAmplitude < this.state.background * config_const.BG_SCALE) { // scale up for sake
         cummulatedBelowBackground++;
-        if (cummulatedBelowBackground >= 3) { // consider no sound for 3 consecutive seconds as user not talking
+        if (cummulatedBelowBackground >= config_const.BG_CUMULATE_CNT) { // consider no sound for 3 consecutive seconds as user not talking
           nextQuestion = true;
           cummulatedBelowBackground = 0;
         }
@@ -205,16 +201,27 @@ export default class Room extends Component {
     // normalize emotion
     const emotionData = this.state.emotionData;
     let sum = 0;
+
     Object.keys(emotionData).forEach((key) => {
       sum += emotionData[key];
     });
-    Object.keys(emotionData).forEach((key) => {
-      emotionData[key] = emotionData[key] / sum;
-    });
+
+    let error = false;
+    if (sum !== 0) {
+      Object.keys(emotionData).forEach((key) => {
+        emotionData[key] = emotionData[key] / sum;
+      });
+    } else {
+      Object.keys(emotionData).forEach((key) => {
+        emotionData[key] = 1 / Object.keys(emotionData).length;
+      });
+      error = true
+    }
 
     // parse data
     const data = {
       emotions: emotionData,
+      error,
       time: {
         startTime: this.state.startTime.toISOString(),
         endTime,
@@ -225,7 +232,7 @@ export default class Room extends Component {
     console.log(this.state.key, data);
     setTimeout(() => {
       Actions.report({data, dataKey: this.state.key});
-    }, 3000);
+    }, timeout_const.END_TALK_TIMEOUT);
   }
 
   changeEmotion(emotion) {
@@ -236,6 +243,8 @@ export default class Room extends Component {
   }
 
   captureImage() {
+    console.log('capture');
+
     this.camera.capture()
       .then((data) => {
         RNFetchBlob.fetch('POST', 'https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize', {
@@ -280,7 +289,7 @@ export default class Room extends Component {
 
     this.setState({
       setup: false,
-      captureImageInterval: setInterval(this.captureImage, 5000),
+      captureImageInterval: setInterval(this.captureImage, interval_const.CAPTURE_IMAGE_INTERVAL),
       ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
 
@@ -293,7 +302,7 @@ export default class Room extends Component {
         <View style={StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}])}>
           <Text style={styles.grannyTextStyle}>KEEP CALM</Text>
           <Text style={styles.grannyTextStyle}>AND</Text>
-          <Animatable.Image animation='bounce' duration={1500} iterationCount='infinite' style={styles.jumpingGrannyStyle} source={jumpingGrannyImage}/>
+          <Animatable.Image animation='bounce' duration={granny_const.BOUNCING_DURATION} iterationCount='infinite' style={styles.jumpingGrannyStyle} source={jumpingGrannyImage}/>
           <Text style={styles.grannyTextStyle}>WAIT FOR</Text>
           <Text style={styles.grannyTextStyle}>GRANNY</Text>
         </View>
