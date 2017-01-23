@@ -10,6 +10,7 @@ import PieChart from './PieChart';
 import * as emotionList from './utils/emotionList';
 import Legends from './Legends';
 import * as sentences from './utils/sentences';
+import { weekdayNames as weekdays } from './utils/weekdayNames'
 
 const styles = StyleSheet.create({
   container: {
@@ -78,7 +79,7 @@ export default class Report extends Component {
       data: props.data || defaultRawData,
       key: props.dataKey,
       parsedData: defaultData,
-      day: (props.data && props.data.time.day) || 'Monday',
+      day: (props.data && weekdays[props.data.time.day]) || 'Monday',
       timeString: null,
       maxEmotion: 'neutral',
     };
