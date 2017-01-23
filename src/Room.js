@@ -30,7 +30,7 @@ const dimensions = {
 };
 
 const jumpingGrannyImage = require('../assets/opening/jumping-granny.png');
-const questions = require('../assets/questions.json').questions;
+const questions = require('./utils/questions.json').questions;
 
 const styles = StyleSheet.create({
   container: {
@@ -149,9 +149,9 @@ export default class Room extends Component {
     let nextQuestion = this.state.nextQuestion;
 
     if (!nextQuestion) { // Granny is not asking a question
-      if (data.maxAmplitude < this.state.background+2000) { // offset 2000 for sake
+      if (data.maxAmplitude < this.state.background + 3000) { // offset 3000 for sake
         cummulatedBelowBackground++;
-        if (cummulatedBelowBackground >= 4) {
+        if (cummulatedBelowBackground >= 3) { // consider no sound for 3 consecutive seconds as user not talking
           nextQuestion = true;
           cummulatedBelowBackground = 0;
         }
@@ -280,7 +280,7 @@ export default class Room extends Component {
 
     this.setState({
       setup: false,
-      captureImageInterval: setInterval(this.captureImage, 3000),
+      captureImageInterval: setInterval(this.captureImage, 5000),
       ttsFinishListener: TTS.addEventListener('tts-finish', this.finishQuestion),
     });
 
