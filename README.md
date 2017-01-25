@@ -15,8 +15,17 @@ Currently only Android is supported.
 ## Usage
 
 1. Clone the project.
-2. Run `npm install`
-3. Go to `node_module/react-native-audio/...../AudioRecorderManager.java` and add `body.putInt("maxAmplitude", recorder.getMaxAmplitude());` here:
+2. Register an [Azure Cognitive Services Account](https://azure.microsoft.com/en-us/services/cognitive-services/) on Emotion API and retrieve the key.
+3. under the root directory, create a file `config.js` and add:
+
+  ```
+  module.exports = {
+    OcpApimSubscriptionKey: [your-key],
+  };
+  ```
+  
+4. Run `npm install`
+5. Go to `node_module/react-native-audio/...../AudioRecorderManager.java` and add `body.putInt("maxAmplitude", recorder.getMaxAmplitude());` here:
 
   ```
   ...
@@ -45,7 +54,7 @@ Currently only Android is supported.
   ...
   ```
 
-4. Run `react-native run-android`, open up AndroidStudio and press __Run__.
+6. Run `react-native run-android`, open up AndroidStudio and press __Run__.
 
 ## Technical Components
 
