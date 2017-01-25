@@ -16,6 +16,7 @@ import * as Animatable from 'react-native-animatable';
 import Granny from './Granny';
 import * as colors from './utils/colors';
 import { interval_const, timeout_const, config_const, granny_const, env_const } from './utils/constants';
+import { OcpApimSubscriptionKey } from '../config';
 
 const windowWidth = env_const.WINDOW_WIDTH;
 const windowHeight = env_const.WINDOW_HEIGHT;
@@ -248,7 +249,7 @@ export default class Room extends Component {
     this.camera.capture()
       .then((data) => {
         RNFetchBlob.fetch('POST', 'https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize', {
-          'Ocp-Apim-Subscription-Key': 'ed42095f31554a55afdc5dd87302a624',
+          'Ocp-Apim-Subscription-Key': OcpApimSubscriptionKey,
           'Content-Type' : 'application/octet-stream',
         }, data.data)
         .then((res) => {
