@@ -4,57 +4,52 @@
 ![SadNeutralGranny](https://github.com/pyliaorachel/granny/blob/master/img/sad_neutral_granny.gif)
 ![SurprisedAngryGranny](https://github.com/pyliaorachel/granny/blob/master/img/surprised_angry_granny.gif)
 
-__Granny__ is an app aimed at helping people to understand their emotions without having to overcome many difficulties when trying to find an assistant. You can easily open the app and talk to Granny, and Granny will respond with a face reflective of your emotions. Emotion history will also be kepted as a diary _(not yet implemented)_. 
+__Granny__ is an app aimed at helping people understand their emotions without having to overcome difficulties such as seeking out outside assistance. One may easily open the app and talk to Granny, and Granny will respond, reflective of your emotions. Voice recording, text transcription, emotion data, and data analysis are stored and may be perused at one's leisure, _(not yet implemented)_ making Granny an ideal journaling app for the emotionally vulnerable.
 
-Details can be found [here](https://devpost.com/software/granny).
+Further details can be found [here](https://devpost.com/software/granny).
+
 
 ## Platform
 
 Currently only Android is supported.
 
+
 ## Usage
 
-1. Clone the project.
-2. Register an [Azure Cognitive Services Account](https://azure.microsoft.com/en-us/services/cognitive-services/) on Emotion API and retrieve the key.
-3. under the root directory, create a file `config.js` and add:
+1. Make sure your devices are set up as outlined [here](https://facebook.github.io/react-native/docs/running-on-device.html) and [AndroidStudio](https://developer.android.com/studio/index.html) installed.
+2. Clone the project.
+3. Register an [Azure Cognitive Services Account](https://azure.microsoft.com/en-us/services/cognitive-services/) on Emotion API and retrieve a key.
+4. Under the root directory, create a file `config.js` and add:
 
   ```
   module.exports = {
-    OcpApimSubscriptionKey: [your-key],
+    OcpApimSubscriptionKey: '[your-key]',
   };
   ```
-  
-4. Run `npm install`
-5. Go to `node_module/react-native-audio/...../AudioRecorderManager.java` and add `body.putInt("maxAmplitude", recorder.getMaxAmplitude());` here:
+
+5. Go to Granny's project directory, then run `npm install`.
+6. Go to `./node_modules/react-native-audio/android/...../AudioRecorderManager.java` and add `body.putInt("maxAmplitude", recorder.getMaxAmplitude());` here:
 
   ```
   ...
-
-  @ReactMethod
-    public void pauseRecording(Promise promise){
-      // Added this function to have the same api for android and iOS, stops recording now
-      stopRecording(promise);
-    }
-
-      private void startTimer(){
-      stopTimer();
-      timer = new Timer();
-      timer.scheduleAtFixedRate(new TimerTask() {
-        @Override
-        public void run() {
-          WritableMap body = Arguments.createMap();
-          body.putInt("currentTime", recorderSecondsElapsed);
-          body.putInt("maxAmplitude", recorder.getMaxAmplitude()); // <-- here
-          sendEvent("recordingProgress", body);
-          recorderSecondsElapsed++;
-        }
-      }, 0, 1000);
-    }
-
+  private void startTimer(){
+    ...
+      @Override
+      public void run() {
+        WritableMap body = Arguments.createMap();
+        body.putInt("currentTime", recorderSecondsElapsed);
+        body.putInt("maxAmplitude", recorder.getMaxAmplitude());        // <-- ADD HERE
+        sendEvent("recordingProgress", body);
+        recorderSecondsElapsed++;
+      }
+    ...
+  }
   ...
   ```
 
-6. Run `react-native run-android`, open up AndroidStudio and press __Run__.
+7. Import Granny into AndroidStudio, and press __Run__.
+8. Return to the root project directory, and run `react-native run-android`.
+
 
 ## Technical Components
 
