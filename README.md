@@ -1,5 +1,6 @@
 # Granny
-<p align="center"><img src="https://github.com/pyliaorachel/granny/blob/master/img/jumping_granny.gif" /></p>
+<p align="center"><img src="https://github.com/pyliaorachel/granny/blob/master/img/jumping_granny.gif" /></p>  
+
 ![HappyGranny](https://github.com/pyliaorachel/granny/blob/master/img/happy_granny.gif)
 ![SadNeutralGranny](https://github.com/pyliaorachel/granny/blob/master/img/sad_neutral_granny.gif)
 ![SurprisedAngryGranny](https://github.com/pyliaorachel/granny/blob/master/img/surprised_angry_granny.gif)
