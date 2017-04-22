@@ -1,8 +1,15 @@
 import { report_const } from './constants';
 
-const getData = () => {
+const getMockData = () => {
   return {
-    summaryData: report_const.DEFAULT_DATA.emotions,
+    summaryData: {
+      ...report_const.DEFAULT_DATA.emotions,
+      counts: {
+        entries: 4,
+        improvements: 2,
+        streak: 5,
+      },
+    },
     allData: [
       {
         data: report_const.DEFAULT_DATA,
@@ -49,5 +56,5 @@ const getData = () => {
 };
 
 module.exports = {
-    getData,
+    getMockData,
 };

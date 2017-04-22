@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 
 import { report_const } from './utils/constants';
-import { getEmotionImprovements } from './utils/utilFunctions';
 import { emotionsAdj } from './utils/emotionList';
 import * as colors from './utils/colors';
 
@@ -35,39 +34,16 @@ export default class ReportInfoPanel extends Component {
     super(props);
     
     this.state = {
-      initialData: props.initialData || report_const.DEFAULT_DATA,
-      lastData: props.lastData || report_const.DEFAULT_DATA,
-      data: props.data || report_const.DEFAULT_DATA,
-      improvement: 0,
-      duration: 0,
+      initialEmotion: props.initialEmotion || 'sad',
+      lastEmotion: props.lastEmotion || 'happiness',
+      improvement: props.improvement || 0,
+      duration: props.duration || 0,
       speechText: props.speechText || report_const.DEFUALT_SPEECH_TEXT,
     };
   }
 
   componentWillMount() {
-    const { initialData, lastData, data } = this.state;
-
-    // max initial/last emotion
-    const initialEmotions = initialData.emotions;
-    const lastEmotions = lastData.emotions;
-    const maxInitialEmotion = Math.max.apply(null, Object.values(initialEmotions));
-    const maxLastEmotion = Math.max.apply(null, Object.values(lastEmotions));
-
-    const initialEmotion = Object.keys(initialEmotions).filter(x => initialEmotions[x] === maxInitialEmotion)[0];
-    const lastEmotion = Object.keys(lastEmotions).filter(x => lastEmotions[x] === maxLastEmotion)[0];
-
-    // improvement
-    const improvement = getEmotionImprovements(initialEmotions, lastEmotions);
-
-    // duration
-    const duration = new Date(new Date(data.time.endTime) - new Date(data.time.startTime));
-
-    this.setState({
-      initialEmotion,
-      lastEmotion,
-      improvement,
-      duration,
-    });
+    
   }
 
   render() {

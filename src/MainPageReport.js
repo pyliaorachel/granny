@@ -53,6 +53,8 @@ export default class MainPageReport extends Component {
       title: title.toUpperCase(),
       dataSource: ds,
       chartData: null,
+      allData: null,
+      summaryData: null,
     };
 
     this.pressReport = this.pressReport.bind(this);
@@ -61,12 +63,14 @@ export default class MainPageReport extends Component {
   }
 
   componentWillMount() {
-    const { summaryData, allData } = API.getData();
+    const { summaryData, allData } = API.getMockData();
     const chartData = parseChartData(summaryData);
 
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(allData),
       chartData: chartData,
+      allData,
+      summaryData,
     });
   }
 
@@ -118,7 +122,7 @@ export default class MainPageReport extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <SubNavBar />
+        <SubNavBar counts={this.state.summaryData && this.state.summaryData.counts}/>
         <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
           <View style={styles.titleTextContainer}>
             <Text style={styles.titleText}>{this.state.title}</Text>

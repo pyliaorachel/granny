@@ -16,15 +16,12 @@ const styles = StyleSheet.create({
     marginTop: navbar_const.HEIGHT,
   },
   tabsContainerStyle: {
-    borderWidth: 0,
-  },
-  tabBarTextStyle: {
-    color: 'white',
-    opacity: 0.6,
+    borderWidth: 0.5,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
   },
   tabBarUnderlineStyle: {
     backgroundColor: 'white',
-    opacity: 0.6,
+    opacity: 0.8,
   },
 });
 
@@ -43,8 +40,9 @@ export default class Main extends Component {
         style={styles.container} 
         tabsContainerStyle={styles.tabsContainerStyle}
         tabBarBackgroundColor={style_const.color.themeGreen}
-        tabBarTextStyle={styles.tabBarTextStyle}
         tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+        tabBarActiveTextColor='white'
+        tabBarInactiveTextColor='rgba(255, 255, 255, 0.8)'
       >
         <MainPageReport tabLabel='Today' />
         <MainPageReport tabLabel='This Month' />
