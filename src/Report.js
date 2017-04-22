@@ -5,13 +5,12 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import PieChart from './PieChart';
 import * as emotionList from './utils/emotionList';
-import Legends from './Legends';
 import * as sentences from './utils/sentences';
-import { weekdayNames as weekdays, monthNamesShort as months } from './utils/timeNames'
-import { report_const } from './utils/constants'
+import { report_const, style_const } from './utils/constants';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,8 +24,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#aaaaaa',
   },
-  sentenceStyle: {
-    fontSize: 20,
+  titleTextContainer: {
+    flex: 0.1,
+    alignSelf: 'center',
+  },
+  titleText: {
+    color: style_const.color.themeGreen,
   },
 });
 
@@ -38,8 +41,6 @@ export default class Report extends Component {
       data: props.data || report_const.DEFAULT_DATA,
       key: props.dataKey,
       parsedData: report_const.DEFAULT_PARSED_DATA,
-      day: (props.data && weekdays[props.data.time.day]) || 'Monday',
-      timeString: null,
       maxEmotion: 'neutral',
     };
   }
@@ -67,28 +68,20 @@ export default class Report extends Component {
       maxEmotion = 'error';
     }
 
-    const startTime = new Date(this.state.data.time.startTime);
-    const timeString = `${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
-
     this.setState({
       parsedData,
-      timeString,
       maxEmotion,
     });
   }
 
   render() {
-    const { day, timeString, maxEmotion, parsedData } = this.state;
+    const { maxEmotion, parsedData } = this.state;
     return (
       <View style={styles.container}>
-        <View style={{flex: 0.1}}>
-          <Text style={styles.timeTextStyle}>{day}, {timeString}</Text>
-        </View>
-        <View style={{flex: 0.2}}>
-          <Text style={styles.sentenceStyle}>{sentences[maxEmotion]}</Text>
+        <View style={styles.titleTextContainer}>
+          <Text style={styles.titleText}>{report_const.REPORT_TITLE.toUpperCase()}</Text>
         </View>
         <PieChart data={parsedData} />
-        <Legends />
       </View>
     );
   }

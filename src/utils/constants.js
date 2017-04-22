@@ -1,8 +1,34 @@
 import { Dimensions } from 'react-native';
 
+const chartSize = 160;
+const ringThickness = 20;
+const chart_const = {
+  chartSize,
+  innerCircleMargin: 8,
+  ringThickness: 20,
+  chart_options: {
+    pie: {
+      margin: {
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
+      },
+      width: chartSize,
+      height: chartSize,
+      color: '#2980B9',
+      r: chartSize/2 - ringThickness,
+      R: chartSize/2,
+    },
+  },
+};
+
 module.exports = {
+  navbar_const: {
+    HEIGHT: 60,
+  },
   interval_const: {
-    CAPTURE_IMAGE_INTERVAL: 4000,
+    CAPTURE_IMAGE_INTERVAL: 10000,
   },
   timeout_const: {
     END_TALK_TIMEOUT: 3000,
@@ -23,6 +49,8 @@ module.exports = {
     },
   },
   report_const: {
+    REPORT_TITLE: 'mood analysis of speech',
+    DEFAULT_NAVBAR_TITLE: 'Report',
     DEFAULT_DATA: {
       emotions: {
         happiness: 0.5,
@@ -65,21 +93,7 @@ module.exports = {
       'score': 0.1
     }],
   },
-  chart_options: {
-    pie: {
-      margin: {
-        top: 0,
-        right: 0,
-        left: 0,
-        bottom: 0,
-      },
-      width: 200,
-      height: 200,
-      color: '#2980B9',
-      r: 80,
-      R: 100,
-    },
-  },
+  chart_const,
   granny_const: {
     BOUNCING_DURATION: 1500,
   },
@@ -87,4 +101,19 @@ module.exports = {
     WINDOW_WIDTH: Dimensions.get('window').width,
     WINDOW_HEIGHT: Dimensions.get('window').height,
   },
+  style_const: {
+    shadow: {
+      shadowColor: '#555555',
+      shadowOpacity: 0.4,
+      shadowRadius: 1,
+      shadowOffset: {
+        height: 0.3,
+        width: 0.3,
+      },
+    },
+    color: {
+      themeGreen: '#11B2B2',
+    }
+  },
+
 };

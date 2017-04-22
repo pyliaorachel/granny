@@ -1,39 +1,58 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 
 import { Pie } from 'react-native-pathjs-charts';
 import * as colors from './utils/colors'
-import { chart_options } from './utils/constants'
+import { chart_const, style_const } from './utils/constants'
 import { hexToRgb } from './utils/utilFunctions'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   chartContainer: {
-    flex: 2,
+    //flex: 2,
+    alignItems: 'center',
+    margin: 10,
+  },
+  chartCenter: {
+    position: 'absolute',
+    width: chart_const.chart_options.pie.r * 2 - chart_const.innerCircleMargin * 2,
+    height: chart_const.chart_options.pie.r * 2 - chart_const.innerCircleMargin * 2,
+    borderRadius: (chart_const.chart_options.pie.r * 2 - chart_const.innerCircleMargin * 2) / 2,
+    //top: -chart_const.chart_options.pie.height + chart_const.ringThickness + chart_const.innerCircleMargin,
+    top: chart_const.ringThickness + chart_const.innerCircleMargin,
+    left: chart_const.ringThickness + chart_const.innerCircleMargin,
+    backgroundColor: 'white',
+    elevation: 2,
   },
   legendsContainer: {
-    flex: 1,
+    //flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
+    margin: 10,
   },
   legendCellContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'green',
   },
   emotionCell: {
 
   },
-  emotionText: {
-    backgroundColor: 'blue',
+  emotionTextContainer: {
     alignItems: 'center',
-  }
+  },
+  emotionScoreText: {
+    fontSize: 20,
+  },
+  emotionNameText: {
+    fontSize: 12,
+  },
 });
 
 export default class PieChart extends Component {
@@ -47,11 +66,11 @@ export default class PieChart extends Component {
 
     const topThree = props.data.sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
       return {
-        name: item.name, 
+        name: item.name[0].toUpperCase() + item.name.slice(1), 
         score: item.score * 100, 
         color: colors[item.name],
         size: (item.score >= 0.4) ? 40 : 40 * (item.score * 100 / 40),
-        borderRadius: (item.score >= 0.4) ? 5 : 5 * (item.score * 100 / 40),
+        borderRadius: (item.score >= 0.4) ? 4 : 4 * (item.score * 100 / 40),
       };
     });
 
@@ -59,7 +78,7 @@ export default class PieChart extends Component {
       data: props.data,
       pallete: RGBColors,
       topThree,
-    }
+    };
   }
 
   render() {
@@ -69,9 +88,12 @@ export default class PieChart extends Component {
         <View style={styles.chartContainer}>
           <Pie data={data}
             accessorKey='score'
-            options={chart_options.pie}
+            options={chart_const.chart_options.pie}
             pallete={pallete}
           />
+          <View style={styles.chartCenter}>
+
+          </View>
         </View>
         <View style={styles.legendsContainer}>
         {
@@ -79,9 +101,9 @@ export default class PieChart extends Component {
             return (
               <View style={styles.legendCellContainer} key={i}>
                 <View style={[styles.emotionCell, {backgroundColor: item.color, width: item.size, height: item.size, borderRadius: item.borderRadius}]}></View>
-                <View style={styles.emotionText}>
-                  <Text>{ item.score } %</Text>
-                  <Text>{ item.name }</Text>
+                <View style={styles.emotionTextContainer}>
+                  <Text style={styles.emotionScoreText}>{ item.score } %</Text>
+                  <Text style={styles.emotionNameText}>{ item.name }</Text>
                 </View>
               </View>
             );

@@ -10,13 +10,14 @@ import Camera from 'react-native-camera';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import TTS from 'react-native-tts';
-import { Actions } from 'react-native-router-flux'
+import { Actions, ActionConst } from 'react-native-router-flux';
 import * as Animatable from 'react-native-animatable';
 
 import Granny from './Granny';
 import * as colors from './utils/colors';
 import { interval_const, timeout_const, config_const, granny_const, env_const } from './utils/constants';
 import { OcpApimSubscriptionKey } from '../config';
+import { weekdayNames as weekdays, monthNamesShort as months } from './utils/timeNames';
 
 const windowWidth = env_const.WINDOW_WIDTH;
 const windowHeight = env_const.WINDOW_HEIGHT;
@@ -31,7 +32,7 @@ const dimensions = {
 };
 
 const jumpingGrannyImage = require('../assets/opening/jumping-granny.png');
-const questions = require('./utils/questions.json').questions;
+const questions = require('./utils/questions_dev.json').questions;
 
 const styles = StyleSheet.create({
   container: {
@@ -230,9 +231,12 @@ export default class Room extends Component {
       }
     };
 
-    console.log(this.state.key, data);
+    const day = (data && weekdays[data.time.day]) || 'Monday';
+    const startTime = new Date(data.time.startTime);
+    const timeString = `${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
+
     setTimeout(() => {
-      Actions.report({data, dataKey: this.state.key});
+      Actions.report({type: ActionConst.PUSH, data, dataKey: this.state.key, title: `${day}, ${timeString}`, hideNavBar: false});
     }, timeout_const.END_TALK_TIMEOUT);
   }
 
