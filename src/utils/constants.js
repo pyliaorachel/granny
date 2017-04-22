@@ -25,14 +25,14 @@ module.exports = {
   report_const: {
     DEFAULT_DATA: {
       emotions: {
-        happiness: 0.125,
-        sadness: 0.125,
-        anger: 0.125,
-        fear: 0.125,
-        surprise: 0.125,
-        contempt: 0.125,
-        disgust: 0.125,
-        neutral: 0.125,
+        happiness: 0.5,
+        sadness: 0.2,
+        anger: 0.1,
+        fear: 0.05,
+        surprise: 0.05,
+        contempt: 0.05,
+        disgust: 0.05,
+        neutral: 0.00,
       },
       time: {
         startTime: '2017-02-21T13:45:30',
@@ -68,15 +68,15 @@ module.exports = {
   chart_options: {
     pie: {
       margin: {
-        top: 20,
-        left: 20,
-        right: 20,
-        bottom: 20
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
       },
-      width: 300,
-      height: 300,
+      width: 200,
+      height: 200,
       color: '#2980B9',
-      r: 20,
+      r: 80,
       R: 100,
     },
   },

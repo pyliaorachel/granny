@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: 30,
+    backgroundColor: '#EEEEEE',
   },
   timeTextStyle: {
     fontSize: 18,
