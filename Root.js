@@ -12,9 +12,9 @@ export default class Root extends Component {
   render() {
     return (
       <Router>
-        <Scene key='main' component={Main} hideNavBar/>
-        <Scene initial key='room' component={Room}  hideNavBar/>
-        <Scene key='report' component={Report} navBar={NavBar} title='Report' />
+        <Scene key='main' component={Main} title='granny' />
+        <Scene key='room' component={Room}  hideNavBar/>
+        <Scene key='report' component={Report} title='Report' />
       </Router>
     );
   }

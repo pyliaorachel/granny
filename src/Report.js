@@ -10,10 +10,12 @@ import {
 import { Actions } from 'react-native-router-flux';
 
 import PieChart from './PieChart';
+import NavBar from './NavBar';
 import ReportInfoPanel from './ReportInfoPanel';
 import * as emotionList from './utils/emotionList';
 import * as sentences from './utils/sentences';
 import { report_const, style_const, navbar_const } from './utils/constants';
+import { parseChartData } from './utils/utilFunctions';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -54,43 +56,39 @@ export default class Report extends Component {
 
   componentWillMount() {
     // chart data
-    const emotions = emotionList.emotions;
-    const dataEmotions = this.state.data.emotions;
-
-    let parsedData = [];
-    let max = -1;
-    let maxEmotion = '';
-    emotions.forEach((emotion) => {
-      const part = {
-        'name': emotion,
-        'score': parseFloat(dataEmotions[emotion]),
-      };
-      parsedData.push(part);
-      if (parseFloat(dataEmotions[emotion]) > max) {
-        max = parseFloat(dataEmotions[emotion]);
-        maxEmotion = emotion;
-      }
-    });
+    let parsedData = parseChartData(this.state.data.emotions);
+    //let max = Math.max.apply(null, Object.values(initialEmotions));
+    //let maxEmotion = '';
+    
 
     if (this.props.data && this.props.data.error) {
-      maxEmotion = 'error';
+      //maxEmotion = 'error';
     }
 
     this.setState({
       parsedData,
-      maxEmotion,
+      //maxEmotion,
     });
   }
 
+  static renderNavigationBar(props) {
+    console.log(props.leaveAction);
+    return (<NavBar leaveAction={props.leaveAction} title={props.title} type={props.navbarType}/>);
+  }
+
   render() {
-    const { maxEmotion, parsedData, data } = this.state;
+    const { parsedData, data } = this.state;
     return (
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
         <View style={styles.titleTextContainer}>
           <Text style={styles.titleText}>{report_const.REPORT_TITLE.toUpperCase()}</Text>
         </View>
         <PieChart data={parsedData} />
-        <ReportInfoPanel data={this.props.data} initialData={this.props.initialData} lastData={this.props.lastData} />
+        <ReportInfoPanel 
+          data={this.props.data} 
+          initialData={this.props.initialData} 
+          lastData={this.props.lastData} 
+        />
       </ScrollView>
     );
   }

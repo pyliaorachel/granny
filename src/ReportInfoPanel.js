@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class ReportInfoPanle extends Component {
+export default class ReportInfoPanel extends Component {
   constructor(props) {
     super(props);
     
@@ -40,6 +40,7 @@ export default class ReportInfoPanle extends Component {
       data: props.data || report_const.DEFAULT_DATA,
       improvement: 0,
       duration: 0,
+      speechText: props.speechText || report_const.DEFUALT_SPEECH_TEXT,
     };
   }
 
@@ -70,12 +71,32 @@ export default class ReportInfoPanle extends Component {
   }
 
   render() {
-    const { initialEmotion, lastEmotion, improvement, duration } = this.state;
+    const { initialEmotion, lastEmotion, improvement, duration, speechText } = this.state;
     return (
       <View style={styles.container}>
-        <Text style={styles.summaryText}>Started <Text style={[styles.emotionText, {color: colors[initialEmotion]}]}>{ emotionsAdj[initialEmotion] }</Text>, Ended <Text style={[styles.emotionText, {color: colors[lastEmotion]}]}>{ emotionsAdj[lastEmotion] }</Text></Text>
-        <Text>Time: {duration.getMinutes()} min</Text>
+        {
+          (this.props.concise) ?
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.summaryText}>Started <Text style={[styles.emotionText, {color: colors[initialEmotion]}]}>{ emotionsAdj[initialEmotion] }</Text>, Ended <Text style={[styles.emotionText, {color: colors[lastEmotion]}]}>{ emotionsAdj[lastEmotion] }</Text></Text>
+              <Text>{parseInt(duration / 36e5)} hr</Text>
+            </View>
+          :
+            <View>
+              <Text style={styles.summaryText}>Started <Text style={[styles.emotionText, {color: colors[initialEmotion]}]}>{ emotionsAdj[initialEmotion] }</Text>, Ended <Text style={[styles.emotionText, {color: colors[lastEmotion]}]}>{ emotionsAdj[lastEmotion] }</Text></Text>
+              <Text>Time: {parseInt(duration / 864e5)} min</Text>
+            </View>
+        }
         <Text style={{color: '#A8D277'}}>{improvement * 100}% Improvement</Text>
+        {
+          (this.props.concise) ?
+            <View>
+              <Text numberOfLines={1} style={{flex: 1, overflow: 'hidden'}}>{speechText}</Text>
+            </View>
+          :
+            <View>
+              <Text>{speechText}</Text>
+            </View>
+        }
       </View>
     );
   }

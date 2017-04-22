@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/EvilIcons';
+import { Actions } from 'react-native-router-flux';
 
 import { report_const, style_const, navbar_const } from './utils/constants';
 
@@ -42,29 +43,54 @@ export default class NavBar extends Component {
   constructor(props) {
     super(props);
 
+    this.settings = this.settings.bind(this);
     this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
   }
 
   handleLeaveButtonClick() {
-    console.log('leave');
+    this.props.leaveAction() || Actions.main();
+  }
+
+  settings() {
+    console.log('settings');
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Icon
-            name='close'
-            size={35}
-            style={{opacity: 0}}
-        />
+        {
+          (this.props.type === navbar_const.type.MAIN) ? 
+            <TouchableHighlight style={styles.navBarIconContainer} underlayColor='transparent' onPress={() => {this.settings()}}>
+              <Icon
+                  name='gear'
+                  size={35}
+                  style={styles.navBarIconButton}
+              />
+            </TouchableHighlight>
+          :
+            <Icon
+                name='close'
+                size={35}
+                style={{opacity: 0}}
+            />
+        }
         <Text style={styles.title}>{this.props.title}</Text>
-        <TouchableHighlight style={styles.navBarIconContainer} underlayColor='transparent' onPress={() => {this.handleLeaveButtonClick()}}>
-          <Icon
-              name='close'
-              size={35}
-              style={styles.navBarIconButton}
-          />
-        </TouchableHighlight>
+        {
+          (this.props.type === navbar_const.type.CLOSE) ? 
+            <TouchableHighlight style={styles.navBarIconContainer} underlayColor='transparent' onPress={() => {this.handleLeaveButtonClick()}}>
+              <Icon
+                  name='close'
+                  size={35}
+                  style={styles.navBarIconButton}
+              />
+            </TouchableHighlight>
+          :
+            <Icon
+                name='close'
+                size={35}
+                style={{opacity: 0}}
+            />
+        }
       </View>
     );
   }

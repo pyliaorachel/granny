@@ -17,7 +17,7 @@ import Granny from './Granny';
 import * as colors from './utils/colors';
 import { interval_const, timeout_const, config_const, granny_const, env_const } from './utils/constants';
 import { OcpApimSubscriptionKey } from '../config';
-import { weekdayNames as weekdays, monthNamesShort as months } from './utils/timeNames';
+import { parseReportTitleDate } from './utils/utilFunctions';
 
 const windowWidth = env_const.WINDOW_WIDTH;
 const windowHeight = env_const.WINDOW_HEIGHT;
@@ -234,16 +234,12 @@ export default class Room extends Component {
       }
     };
 
-    const day = (data && weekdays[data.time.day]) || 'Monday';
-    const startTime = new Date(data.time.startTime);
-    const timeString = `${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
-
     setTimeout(() => {
       Actions.report({
         type: ActionConst.PUSH, 
         data, 
         dataKey: this.state.key, 
-        title: `${day}, ${timeString}`, 
+        title: parseReportTitleDate(data), 
         hideNavBar: false,
         initialData: this.state.initialData,
         lastData: this.state.lastData,

@@ -27,6 +27,12 @@ const chart_const = {
 module.exports = {
   navbar_const: {
     HEIGHT: 60,
+    SUBNAVBAR_HEIGHT: 50,
+    type: {
+      NONE: 'none',
+      MAIN: 'main',
+      CLOSE: 'close',
+    }
   },
   interval_const: {
     CAPTURE_IMAGE_INTERVAL: 10000,
@@ -52,7 +58,11 @@ module.exports = {
   report_const: {
     CONTAINER_PADDING: 20,
     REPORT_TITLE: 'mood analysis of speech',
+    REPORT_TITLE_TODAY: 'your mood over today',
+    REPORT_TITLE_MONTH: 'your mood over this month',
+    REPORT_TITLE_ALL_TIME: 'your mood over all time',
     DEFAULT_NAVBAR_TITLE: 'Report',
+    DEFUALT_SPEECH_TEXT: 'This is default speech textThis is default speech textThis is default speech textThis is default speech text',
     DEFAULT_DATA: {
       emotions: {
         happiness: 0.5,
@@ -66,7 +76,7 @@ module.exports = {
       },
       time: {
         startTime: '2017-02-21T13:45:30',
-        endTime: '2017-02-21T13:55:31'
+        endTime: '2017-02-21T14:55:31'
       }
     },
     DEFAULT_PARSED_DATA: [{

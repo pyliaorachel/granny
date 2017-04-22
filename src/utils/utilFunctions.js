@@ -1,5 +1,5 @@
-import { positiveEmotions, negativeEmotions } from './emotionList';
-
+import { emotions, positiveEmotions, negativeEmotions } from './emotionList';
+import { weekdayNames as weekdays, monthNamesShort as months } from './timeNames';
 
 /*
   Converting hex color value to RGB representation.
@@ -30,6 +30,26 @@ const hexToRgb = (hex) => {
     } : null;
 };
 
+const parseChartData = (dataEmotions) => {
+  let parsedData = [];
+
+  emotions.forEach((emotion) => {
+    const part = {
+      'name': emotion,
+      'score': parseFloat(dataEmotions[emotion]),
+    };
+    parsedData.push(part);
+  });
+
+  return parsedData;
+};
+
+const parseReportTitleDate = (data) => {
+  const day = (data && weekdays[data.time.day]) || 'Monday';
+  const startTime = new Date(data.time.startTime);
+  return `${day}, ${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
+};
+
 const getEmotionImprovements = (initialEmotions, lastEmotions) => {
   console.log(initialEmotions);
   const initialPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
@@ -50,5 +70,7 @@ const getEmotionImprovements = (initialEmotions, lastEmotions) => {
 
 module.exports = {
   hexToRgb,
+  parseChartData,
+  parseReportTitleDate,
   getEmotionImprovements,
 };
