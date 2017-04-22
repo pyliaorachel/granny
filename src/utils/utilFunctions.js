@@ -30,16 +30,31 @@ const hexToRgb = (hex) => {
     } : null;
 };
 
-const parseChartData = (dataEmotions) => {
+const parseChartData = (data, chartType) => {
   let parsedData = [];
-
-  emotions.forEach((emotion) => {
-    const part = {
-      'name': emotion,
-      'score': parseFloat(dataEmotions[emotion]),
-    };
-    parsedData.push(part);
-  });
+  console.log('data', data);
+  console.log(chartType);
+  if (chartType === 'pie') {
+    const dataEmotions = data.emotions;
+    emotions.forEach((emotion) => {
+      const part = {
+        'name': emotion,
+        'score': parseFloat(dataEmotions[emotion]),
+      };
+      parsedData.push(part);
+    });
+  } else {
+    const dataEmotions = data.emotions;
+    let parsedLineData = []
+    dataEmotions.forEach((emotion, i) => {
+      const part = {
+        'day': i + 1,
+        'emotionID': emotions.indexOf(emotion),
+      };
+      parsedLineData.push(part);
+    });
+    parsedData.push(parsedLineData);
+  }
 
   return parsedData;
 };

@@ -1,13 +1,13 @@
 module.exports = {
   emotions: [
-    'happiness',
     'anger',
-    'fear',
-    'surprise',
-    'contempt',
+    'sadness',
     'disgust',
+    'fear',
+    'contempt',
     'neutral',
-    'sadness'
+    'surprise',
+    'happiness',
   ],
   emotionsAdj: {
     happiness: 'happy',
@@ -29,5 +29,8 @@ module.exports = {
     'contempt',
     'disgust',
     'sadness',
+  ],
+  emotionEmojis: [
+    '😡', '😢', '😖', '😨', '😒', '😌', '😂', '😁', 
   ]
 };

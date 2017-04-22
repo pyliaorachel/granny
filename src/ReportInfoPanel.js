@@ -15,7 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: 10,
+    padding: report_const.CONTAINER_PADDING,
     backgroundColor: 'white',
     minHeight: report_const.infoPanel.MIN_HEIGHT,
     width: screenWidth - report_const.CONTAINER_PADDING * 2,
@@ -49,7 +49,7 @@ export default class ReportInfoPanel extends Component {
   render() {
     const { initialEmotion, lastEmotion, improvement, duration, speechText } = this.state;
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {width: (this.props.concise) ? screenWidth : (screenWidth - report_const.CONTAINER_PADDING * 2)}]}>
         {
           (this.props.concise) ?
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

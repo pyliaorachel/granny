@@ -62,7 +62,6 @@ export default class PieChart extends Component {
       return (color !== 'default') ? hexToRgb(colors[color]) : null;
     });
     RGBColors.pop();
-    console.log(props.data);
 
     const topThree = props.data.sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
       return {
@@ -83,6 +82,7 @@ export default class PieChart extends Component {
 
   render() {
     const { data, pallete, topThree } = this.state;
+    console.log(pallete);
     return (
       <View style={styles.container}>
         <View style={styles.chartContainer}>

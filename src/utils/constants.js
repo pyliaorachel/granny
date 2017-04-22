@@ -1,7 +1,15 @@
 import { Dimensions } from 'react-native';
+import { emotionEmojis } from './emotionList';
+
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const chartSize = 160;
 const ringThickness = 20;
+const reportContainerPadding = 20;
+const labelFunction = (v) => {
+  return emotionEmojis[v];
+};
 const chart_const = {
   HEIGHT: 300,
   CHART_SIZE: chartSize,
@@ -18,9 +26,64 @@ const chart_const = {
       width: chartSize,
       height: chartSize,
       color: '#2980B9',
+      strokeWidth: 0,
       r: chartSize/2 - ringThickness,
       R: chartSize/2,
+      label: {
+        color: 'transparent',
+      }
     },
+    stockLine: {
+      width: screenWidth - reportContainerPadding * 2,
+      height: chartSize,
+      color: '#11B2B2',
+      opacity: 1,
+      margin: {
+        top: reportContainerPadding,
+        left: reportContainerPadding,
+        bottom: reportContainerPadding,
+        right: 0
+      },
+      animate: {
+        type: 'delayed',
+        duration: 200
+      },
+      axisX: {
+        showAxis: false,
+        showLines: false,
+        showLabels: true,
+        showTicks: false,
+        zeroAxis: false,
+        orient: 'bottom',
+        tickValues: [],
+        gridColor: '#dddddd',
+        label: {
+          fontFamily: 'Arial',
+          fontSize: 8,
+          fontWeight: true,
+          fill: '#34495E',
+          color: '#bbbbbb',
+        }
+      },
+      axisY: {
+        showAxis: false,
+        showLines: true,
+        showLabels: true,
+        showTicks: false,
+        zeroAxis: false,
+        orient: 'left',
+        tickValues: [],
+        gridColor: '#dddddd',
+        label: {
+          fontFamily: 'Arial',
+          fontSize: 10,
+          fontWeight: true,
+          fill: '#34495E',
+          color: '#bbbbbb',
+        },
+        labelFunction,
+      }
+    }
   },
 };
 
@@ -56,7 +119,7 @@ module.exports = {
     },
   },
   report_const: {
-    CONTAINER_PADDING: 20,
+    CONTAINER_PADDING: reportContainerPadding,
     REPORT_TITLE: 'mood analysis of speech',
     REPORT_TITLE_TODAY: 'your mood over today',
     REPORT_TITLE_MONTH: 'your mood over this month',
@@ -77,8 +140,19 @@ module.exports = {
       time: {
         startTime: '2017-02-21T13:45:30',
         endTime: '2017-02-21T14:55:31'
-      }
+      },
+      improvement: 0,
     },
+    DEFAULT_MONTH_DATA: [
+      'happiness', 'sadness', 'anger', 'neutral', 
+      'surprise', 'sadness', 'disgust', 'happiness', 
+      'contempt', 'anger', 'anger', 'happiness', 
+      'sadness', 'disgust', 'happiness', 'happiness', 
+      'neutral', 'sadness', 'anger', 'happiness', 
+      'sadness', 'disgust', 'anger', 'happiness', 
+      'happiness', 'surprise', 'sadness', 'happiness', 
+      'sadness', 'neutral'
+    ],
     DEFAULT_PARSED_DATA: [{
       'name': 'happiness',
       'score': 0.1
@@ -105,7 +179,7 @@ module.exports = {
       'score': 0.1
     }],
     infoPanel: {
-      MIN_HEIGHT: 100,
+      MIN_HEIGHT: 80,
     }
   },
   chart_const,
@@ -113,8 +187,8 @@ module.exports = {
     BOUNCING_DURATION: 1500,
   },
   env_const: {
-    WINDOW_WIDTH: Dimensions.get('window').width,
-    WINDOW_HEIGHT: Dimensions.get('window').height,
+    WINDOW_WIDTH: screenWidth,
+    WINDOW_HEIGHT: screenHeight,
   },
   style_const: {
     shadow: {

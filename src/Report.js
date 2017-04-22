@@ -60,7 +60,7 @@ export default class Report extends Component {
 
   componentWillMount() {
     // chart data
-    let parsedData = parseChartData(this.state.data.emotions);
+    let parsedData = parseChartData(this.state.data, 'pie');
     //let max = Math.max.apply(null, Object.values(initialEmotions));
     //let maxEmotion = '';
     

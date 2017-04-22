@@ -10,6 +10,7 @@ import {
 import { Actions, ActionConst } from 'react-native-router-flux';
 
 import PieChart from './PieChart';
+import StockLineChart from './StockLineChart';
 import ReportInfoPanel from './ReportInfoPanel';
 import SubNavBar from './SubNavBar';
 import * as API from './utils/API';
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   },
   container: {
     //flex: 1,
-    padding: report_const.CONTAINER_PADDING,
+    paddingVertical: report_const.CONTAINER_PADDING,
   },
   reportList: {
 
@@ -46,7 +47,7 @@ export default class MainPageReport extends Component {
 
     const title = (props.tabLabel === 'Today') ? report_const.REPORT_TITLE_TODAY : 
                   ((props.tabLabel === 'This Month') ? report_const.REPORT_TITLE_MONTH : report_const.REPORT_TITLE_ALL_TIME);
-
+    const chartType = (props.tabLabel === 'Today') ? 'pie' : 'stockLine';
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
@@ -55,6 +56,7 @@ export default class MainPageReport extends Component {
       chartData: null,
       allData: null,
       summaryData: null,
+      chartType,
     };
 
     this.pressReport = this.pressReport.bind(this);
@@ -63,8 +65,8 @@ export default class MainPageReport extends Component {
   }
 
   componentWillMount() {
-    const { summaryData, allData } = API.getMockData();
-    const chartData = parseChartData(summaryData);
+    const { summaryData, allData } = API.getMockData(this.state.chartType);
+    const chartData = parseChartData(summaryData, this.state.chartType);
 
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(allData),
@@ -89,9 +91,11 @@ export default class MainPageReport extends Component {
   }
 
   renderChart() {
-    return (
+  
+    return (this.state.chartType === 'pie') ? 
       <PieChart data={this.state.chartData} />
-    );
+    :
+      <StockLineChart data={this.state.chartData} />
   }
 
   renderReportList() {
