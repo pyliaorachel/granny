@@ -8,7 +8,7 @@ import { hexToRgb } from './utils/utilFunctions'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: chart_const.HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -21,12 +21,11 @@ const styles = StyleSheet.create({
   },
   chartCenter: {
     position: 'absolute',
-    width: chart_const.chart_options.pie.r * 2 - chart_const.innerCircleMargin * 2,
-    height: chart_const.chart_options.pie.r * 2 - chart_const.innerCircleMargin * 2,
-    borderRadius: (chart_const.chart_options.pie.r * 2 - chart_const.innerCircleMargin * 2) / 2,
-    //top: -chart_const.chart_options.pie.height + chart_const.ringThickness + chart_const.innerCircleMargin,
-    top: chart_const.ringThickness + chart_const.innerCircleMargin,
-    left: chart_const.ringThickness + chart_const.innerCircleMargin,
+    width: chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2,
+    height: chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2,
+    borderRadius: (chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2) / 2,
+    top: chart_const.RING_THICKNESS + chart_const.INNER_CIRCLE_MARGIN,
+    left: chart_const.RING_THICKNESS + chart_const.INNER_CIRCLE_MARGIN,
     backgroundColor: 'white',
     elevation: 2,
   },
@@ -67,7 +66,7 @@ export default class PieChart extends Component {
     const topThree = props.data.sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
       return {
         name: item.name[0].toUpperCase() + item.name.slice(1), 
-        score: item.score * 100, 
+        score: parseInt(item.score * 100), 
         color: colors[item.name],
         size: (item.score >= 0.4) ? 40 : 40 * (item.score * 100 / 40),
         borderRadius: (item.score >= 0.4) ? 4 : 4 * (item.score * 100 / 40),

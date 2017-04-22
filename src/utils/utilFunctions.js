@@ -1,3 +1,6 @@
+import { positiveEmotions, negativeEmotions } from './emotionList';
+
+
 /*
   Converting hex color value to RGB representation.
 
@@ -25,8 +28,27 @@ const hexToRgb = (hex) => {
         'g': parseInt(result[2], 16),
         'b': parseInt(result[3], 16)
     } : null;
-}
+};
+
+const getEmotionImprovements = (initialEmotions, lastEmotions) => {
+  console.log(initialEmotions);
+  const initialPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
+    return prev + initialEmotions[emotion];
+  }, 0);
+  const initialNegativeEmotions = negativeEmotions.reduce((prev, emotion) => {
+    return prev + initialEmotions[emotion];
+  }, 0);
+  const lastPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
+    return prev + lastEmotions[emotion];
+  }, 0);
+  const lastNegativeEmotions = negativeEmotions.reduce((prev, emotion) => {
+    return prev + lastEmotions[emotion];
+  }, 0);
+
+  return (lastPositiveEmotions - initialPositiveEmotions) + (initialNegativeEmotions - lastNegativeEmotions) / 2;
+};
 
 module.exports = {
   hexToRgb,
+  getEmotionImprovements,
 };

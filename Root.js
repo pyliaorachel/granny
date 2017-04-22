@@ -13,8 +13,8 @@ export default class Root extends Component {
     return (
       <Router>
         <Scene key='main' component={Main} hideNavBar/>
-        <Scene key='room' component={Room}  hideNavBar/>
-        <Scene initial key='report' component={Report} navBar={NavBar} title='Report' />
+        <Scene initial key='room' component={Room}  hideNavBar/>
+        <Scene key='report' component={Report} navBar={NavBar} title='Report' />
       </Router>
     );
   }

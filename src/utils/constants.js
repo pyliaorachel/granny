@@ -3,9 +3,10 @@ import { Dimensions } from 'react-native';
 const chartSize = 160;
 const ringThickness = 20;
 const chart_const = {
-  chartSize,
-  innerCircleMargin: 8,
-  ringThickness: 20,
+  HEIGHT: 300,
+  CHART_SIZE: chartSize,
+  INNER_CIRCLE_MARGIN: 8,
+  RING_THICKNESS: ringThickness,
   chart_options: {
     pie: {
       margin: {
@@ -49,6 +50,7 @@ module.exports = {
     },
   },
   report_const: {
+    CONTAINER_PADDING: 20,
     REPORT_TITLE: 'mood analysis of speech',
     DEFAULT_NAVBAR_TITLE: 'Report',
     DEFAULT_DATA: {
@@ -92,6 +94,9 @@ module.exports = {
       'name': 'sadness',
       'score': 0.1
     }],
+    infoPanel: {
+      MIN_HEIGHT: 100,
+    }
   },
   chart_const,
   granny_const: {
@@ -115,5 +120,4 @@ module.exports = {
       themeGreen: '#11B2B2',
     }
   },
-
 };

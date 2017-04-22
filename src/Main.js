@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Report extends Component {
+export default class Main extends Component {
   constructor(props) {
     super(props);
   }

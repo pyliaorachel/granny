@@ -29,9 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   navBarIconContainer: {
-    // flex: 1,
-    // backgroundColor: 'transparent',
-    // alignSelf: 'center',
+
   },
   navBarIconButton: {
     color: 'white',
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Report extends Component {
+export default class NavBar extends Component {
   constructor(props) {
     super(props);
 

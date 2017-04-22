@@ -79,6 +79,8 @@ export default class Room extends Component {
         neutral: 0,
         sadness: 0,
       },
+      initialData: null,
+      lastData: null,
       startTime,
       key,
       setup: true,
@@ -202,6 +204,7 @@ export default class Room extends Component {
 
     // normalize emotion
     const emotionData = this.state.emotionData;
+    console.log(emotionData);
     let sum = 0;
 
     Object.keys(emotionData).forEach((key) => {
@@ -236,7 +239,15 @@ export default class Room extends Component {
     const timeString = `${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
 
     setTimeout(() => {
-      Actions.report({type: ActionConst.PUSH, data, dataKey: this.state.key, title: `${day}, ${timeString}`, hideNavBar: false});
+      Actions.report({
+        type: ActionConst.PUSH, 
+        data, 
+        dataKey: this.state.key, 
+        title: `${day}, ${timeString}`, 
+        hideNavBar: false,
+        initialData: this.state.initialData,
+        lastData: this.state.lastData,
+    });
     }, timeout_const.END_TALK_TIMEOUT);
   }
 
@@ -257,11 +268,11 @@ export default class Room extends Component {
           'Content-Type' : 'application/octet-stream',
         }, data.data)
         .then((res) => {
-          console.log(JSON.parse(res.text()));
           const data = JSON.parse(res.text());
           const emotionData = this.state.emotionData;
+          const record = data && data[0]; // retrieve the first data record in array
 
-          data.forEach((record) => {
+          if (record) {
             const scores = record.scores;
             this.setState({
               emotionData: {
@@ -274,13 +285,16 @@ export default class Room extends Component {
                 neutral: emotionData.neutral + scores.neutral,
                 sadness: emotionData.sadness + scores.sadness,
               },
+              lastData: {...scores},
             });
+            if (!this.state.initialData) {
+              this.setState({initialData: {...scores}});
+            }
             const maxKey = Object.keys(scores).reduce(function(a, b){ return scores[a] > scores[b] ? a : b });
             if (scores[maxKey] !== 0 && maxKey !== this.state.grannyEmotion) {
               this.changeEmotion(maxKey);
             }
-          });
-          console.log(emotionData);
+          }
         })
         .catch((err) => console.log('Error: ', err));
       })

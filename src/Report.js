@@ -4,28 +4,35 @@ import {
   Image,
   StyleSheet,
   Text,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import PieChart from './PieChart';
+import ReportInfoPanel from './ReportInfoPanel';
 import * as emotionList from './utils/emotionList';
 import * as sentences from './utils/sentences';
-import { report_const, style_const } from './utils/constants';
+import { report_const, style_const, navbar_const } from './utils/constants';
+
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    padding: 30,
     backgroundColor: '#EEEEEE',
+  },
+  container: {
+    //flex: 1,
+    justifyContent: 'center',
+    padding: report_const.CONTAINER_PADDING,
+    paddingTop: navbar_const.HEIGHT + report_const.CONTAINER_PADDING,
   },
   timeTextStyle: {
     fontSize: 18,
     color: '#aaaaaa',
   },
   titleTextContainer: {
-    flex: 0.1,
     alignSelf: 'center',
   },
   titleText: {
@@ -46,6 +53,7 @@ export default class Report extends Component {
   }
 
   componentWillMount() {
+    // chart data
     const emotions = emotionList.emotions;
     const dataEmotions = this.state.data.emotions;
 
@@ -75,14 +83,15 @@ export default class Report extends Component {
   }
 
   render() {
-    const { maxEmotion, parsedData } = this.state;
+    const { maxEmotion, parsedData, data } = this.state;
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
         <View style={styles.titleTextContainer}>
           <Text style={styles.titleText}>{report_const.REPORT_TITLE.toUpperCase()}</Text>
         </View>
         <PieChart data={parsedData} />
-      </View>
+        <ReportInfoPanel data={this.props.data} initialData={this.props.initialData} lastData={this.props.lastData} />
+      </ScrollView>
     );
   }
 }
