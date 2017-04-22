@@ -15,7 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: report_const.CONTAINER_PADDING,
+    paddingHorizontal: report_const.CONTAINER_PADDING,
     backgroundColor: 'white',
     minHeight: report_const.infoPanel.MIN_HEIGHT,
     width: screenWidth - report_const.CONTAINER_PADDING * 2,

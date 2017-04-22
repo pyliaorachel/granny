@@ -24,14 +24,14 @@ const styles = StyleSheet.create({
   },
   container: {
     //flex: 1,
-    paddingVertical: report_const.CONTAINER_PADDING,
+    paddingTop: report_const.CONTAINER_PADDING,
   },
   reportList: {
 
   },
   reportListCell: {
     borderColor: '#EEEEEE',
-    borderWidth: 1,
+    borderWidth: 0.5,
   },
   titleTextContainer: {
     alignSelf: 'center',

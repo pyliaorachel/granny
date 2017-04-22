@@ -179,7 +179,7 @@ module.exports = {
       'score': 0.1
     }],
     infoPanel: {
-      MIN_HEIGHT: 80,
+      MIN_HEIGHT: 100,
     }
   },
   chart_const,

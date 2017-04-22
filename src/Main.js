@@ -23,6 +23,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     opacity: 0.8,
   },
+  startRecordButton: {
+    backgroundColor: 'red',
+    elevation: 2,
+    width: 50,
+    height: 50,
+    position: 'absolute',
+  }
 });
 
 export default class Main extends Component {
@@ -36,18 +43,21 @@ export default class Main extends Component {
 
   render() {
     return (
-      <ScrollableTabView 
-        style={styles.container} 
-        tabsContainerStyle={styles.tabsContainerStyle}
-        tabBarBackgroundColor={style_const.color.themeGreen}
-        tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
-        tabBarActiveTextColor='white'
-        tabBarInactiveTextColor='rgba(255, 255, 255, 0.8)'
-      >
-        <MainPageReport tabLabel='Today' />
-        <MainPageReport tabLabel='This Month' />
-        <MainPageReport tabLabel='All Time' />
-      </ScrollableTabView>
+      <View style={styles.container}>
+        <ScrollableTabView 
+          style={{flex: 1}} 
+          tabsContainerStyle={styles.tabsContainerStyle}
+          tabBarBackgroundColor={style_const.color.themeGreen}
+          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+          tabBarActiveTextColor='white'
+          tabBarInactiveTextColor='rgba(255, 255, 255, 0.8)'
+        >
+          <MainPageReport tabLabel='Today' />
+          <MainPageReport tabLabel='This Month' />
+          <MainPageReport tabLabel='All Time' />
+        </ScrollableTabView>
+        {/*<View style={styles.startRecordButton}></View>*/}
+      </View>
     );
   }
 }
