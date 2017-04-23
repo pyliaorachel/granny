@@ -84,6 +84,7 @@ export default class MainPageReport extends Component {
     const { d, m, y } = this.state;
     switch (this.state.dataType) {
       case DATA_TYPE.DAY:
+        api.getDayMetaData(this.retrievedData);
         api.getDayData(this.retrievedData, d, m, y);
         break;
       case DATA_TYPE.MONTH:
@@ -97,13 +98,27 @@ export default class MainPageReport extends Component {
 
   retrievedData(data) {
     console.log('retrieved data', data);
+    if (data.dayMetaData) {
+      const meta = Object.assign({}, this.state.summaryData && this.state.summaryData.meta, data.dayMetaData);
+      this.setState({
+        summaryData: {
+          meta,
+        }
+      });
+    }
+
     if (data.summaryData) {
       const paddingUntil = getPaddingUntil(this.state.dataType, this.state.m, this.state.y);
       const chartData = parseChartData(data.summaryData, this.state.chartType, paddingUntil);
 
+      const meta = Object.assign({}, this.state.summaryData && this.state.summaryData.meta, data.summaryData.meta);
+
       this.setState({
         chartData: chartData,
-        summaryData: data.summaryData,
+        summaryData: {
+          ...this.state.summaryData,
+          meta,
+        }
       });
     }
 

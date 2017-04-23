@@ -92,14 +92,18 @@ export default class PieChart extends Component {
       return hexToRgb(color);
     });
 
+    const emotionSum = props.data.reduce((prev, item) => prev + item.score, 0);
+
     const topThree = props.data.slice().sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
+      const noremalizedScore = item.score / emotionSum;
+      console.log('normalized', noremalizedScore);
       return {
         key: item.name,
         name: item.name[0].toUpperCase() + item.name.slice(1), 
-        score: parseInt(item.score * 100), 
+        score: parseInt(noremalizedScore * 100), 
         color: colors[item.name],
-        size: (item.score >= 0.4) ? 40 : 40 * (item.score * 100 / 40),
-        borderRadius: (item.score >= 0.4) ? 4 : 4 * (item.score * 100 / 40),
+        size: (noremalizedScore >= 0.4) ? 40 : 40 * (noremalizedScore * 100 / 40),
+        borderRadius: (noremalizedScore >= 0.4) ? 4 : 4 * (noremalizedScore * 100 / 40),
       };
     });
 

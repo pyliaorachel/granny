@@ -12,6 +12,12 @@ const userJournals = db.ref(`user-journals/${userID}`);
 const entries = userJournals.child('entries');
 const summaries = userJournals.child('summaries');
 
+const getDayMetaData = (cb) => {
+  summaries.child(`day/meta`).on('value', (snapshot) => {
+    return cb({ dayMetaData: snapshot.val() });
+  });
+};
+
 const getDayData = (cb, d = (new Date().getDate()), m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
   summaries.child(`day/${d}`).on('value', (snapshot) => {
     return cb({ summaryData: snapshot.val() });
@@ -281,8 +287,9 @@ const uploadJourney = (data) => {
 };
 
 module.exports = {
-    getDayData,
-    getMonthData,
-    getYearData,
-    uploadJourney,
+  getDayMetaData,
+  getDayData,
+  getMonthData,
+  getYearData,
+  uploadJourney,
 };

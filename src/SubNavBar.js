@@ -52,6 +52,7 @@ export default class SubNavBar extends Component {
   }
 
   componentWillReceiveProps(props) {
+    console.log(props.meta);
     if (!this.state.meta !== props.meta) {
       this.setState({
         meta: {...props.meta}
