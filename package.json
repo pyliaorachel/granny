@@ -18,7 +18,8 @@
     "react-native-router-flux": "^3.37.0",
     "react-native-scrollable-tab-view": "git+https://github.com/pyliaorachel/react-native-scrollable-tab-view.git",
     "react-native-tts": "^1.0.0",
-    "react-native-vector-icons": "^4.0.1"
+    "react-native-vector-icons": "^4.0.1",
+    "firebase": "^3.8.0"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
