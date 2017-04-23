@@ -30,6 +30,11 @@ const hexToRgb = (hex) => {
     } : null;
 };
 
+const hexToRgba = (hex, a) => {
+  const rgb = hexToRgb(hex);
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${a})`;
+};
+
 const parseChartData = (data, chartType) => {
   let parsedData = [];
   console.log('data', data);
@@ -85,6 +90,7 @@ const getEmotionImprovements = (initialEmotions, lastEmotions) => {
 
 module.exports = {
   hexToRgb,
+  hexToRgba,
   parseChartData,
   parseReportTitleDate,
   getEmotionImprovements,

@@ -4,7 +4,7 @@ import { emotionEmojis } from './emotionList';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const chartSize = 160;
+const chartSize = 200;
 const ringThickness = 20;
 const reportContainerPadding = 20;
 const labelFunction = (v) => {

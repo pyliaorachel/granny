@@ -1,10 +1,32 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, Image } from 'react-native';
 
 import { Pie } from 'react-native-pathjs-charts';
 import * as colors from './utils/colors'
 import { chart_const, style_const } from './utils/constants'
-import { hexToRgb } from './utils/utilFunctions'
+import { hexToRgb, hexToRgba } from './utils/utilFunctions'
+
+const neutralImage = require('../assets/emotions/neutral.png');
+const angerImage = require('../assets/emotions/anger.png');
+const contemptImage = require('../assets/emotions/contempt.png');
+const disgustImage = require('../assets/emotions/disgust.png');
+const fearImage = require('../assets/emotions/fear.png');
+const happyImage = require('../assets/emotions/happy.png');
+const sadImage = require('../assets/emotions/sad.png');
+const surprisedImage = require('../assets/emotions/surprised.png');
+
+const emotionImages = {
+  neutral: neutralImage,
+  anger: angerImage,
+  contempt: contemptImage,
+  disgust: disgustImage,
+  fear: fearImage,
+  happiness: happyImage,
+  sadness: sadImage,
+  surprise: surprisedImage,
+};
+
+const CHART_CENTER_SIZE = chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2;
 
 const styles = StyleSheet.create({
   container: {
@@ -21,13 +43,18 @@ const styles = StyleSheet.create({
   },
   chartCenter: {
     position: 'absolute',
-    width: chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2,
-    height: chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2,
+    width: CHART_CENTER_SIZE,
+    height: CHART_CENTER_SIZE,
     borderRadius: (chart_const.chart_options.pie.r * 2 - chart_const.INNER_CIRCLE_MARGIN * 2) / 2,
     top: chart_const.RING_THICKNESS + chart_const.INNER_CIRCLE_MARGIN,
     left: chart_const.RING_THICKNESS + chart_const.INNER_CIRCLE_MARGIN,
     backgroundColor: 'white',
-    elevation: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chartCenterImage: {
+    width: CHART_CENTER_SIZE - 30,
+    height: CHART_CENTER_SIZE - 30,
   },
   legendsContainer: {
     //flex: 1,
@@ -65,6 +92,7 @@ export default class PieChart extends Component {
 
     const topThree = props.data.sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
       return {
+        key: item.name,
         name: item.name[0].toUpperCase() + item.name.slice(1), 
         score: parseInt(item.score * 100), 
         color: colors[item.name],
@@ -82,7 +110,7 @@ export default class PieChart extends Component {
 
   render() {
     const { data, pallete, topThree } = this.state;
-    console.log(pallete);
+    const chartCenterBGColor = hexToRgba(colors[topThree[0].key], 0.6);
     return (
       <View style={styles.container}>
         <View style={styles.chartContainer}>
@@ -91,8 +119,8 @@ export default class PieChart extends Component {
             options={chart_const.chart_options.pie}
             pallete={pallete}
           />
-          <View style={styles.chartCenter}>
-
+          <View style={[styles.chartCenter, {backgroundColor: chartCenterBGColor}]}>
+            <Image style={styles.chartCenterImage} source={emotionImages[topThree[0].key]} />
           </View>
         </View>
         <View style={styles.legendsContainer}>
