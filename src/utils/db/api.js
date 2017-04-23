@@ -4,9 +4,21 @@ import { report_const, enum_const } from '../constants';
 
 const { CHART_TYPE } = enum_const;
 
+const mockUserID = 'abcde';
+const userID = mockUserID;
+const userJournals = db.ref(`user-journals/${userID}`);
+const entries = userJournals.child('entries');
+const summaries = userJournals.child('summaries');
+
 const getDayData = (d = (new Date().getDate()), m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
-    console.log(y, m, d);
-    return getMockData(CHART_TYPE.PIE);
+  return Promise.all([summaries.child(`day/${d}`).once('value'), entries.child(`${y}/${m}/${d}`).once('value')])
+    .then(snapshots => {
+      console.log(snapshots);
+      return {
+        summaryData: snapshots[0].val(),
+        allData: snapshots[1].val(),
+      };
+    });
 };
 
 const getMonthData = (m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {

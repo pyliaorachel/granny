@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image } from 'react-native';
 
 import { Pie } from 'react-native-pathjs-charts';
-import * as colors from './utils/colors'
-import { chart_const, style_const } from './utils/constants'
-import { hexToRgb, hexToRgba } from './utils/utilFunctions'
+import * as colors from './utils/colors';
+import { emotions } from './utils/emotionList';
+import { chart_const, style_const } from './utils/constants';
+import { hexToRgb, hexToRgba } from './utils/utilFunctions';
 
 const neutralImage = require('../assets/emotions/neutral.png');
 const angerImage = require('../assets/emotions/anger.png');
@@ -84,13 +85,14 @@ const styles = StyleSheet.create({
 export default class PieChart extends Component {
   constructor(props) {
     super(props);
+    const data = props.data.slice().sort((a, b) => emotions.indexOf(a.name) - emotions.indexOf(b.name));
 
-    const RGBColors = Object.keys(colors).map((color) => {
-      return (color !== 'default') ? hexToRgb(colors[color]) : null;
+    const RGBColors = emotions.map((emotion) => {
+      const color = colors[emotion];
+      return hexToRgb(color);
     });
-    RGBColors.pop();
 
-    const topThree = props.data.sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
+    const topThree = props.data.slice().sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
       return {
         key: item.name,
         name: item.name[0].toUpperCase() + item.name.slice(1), 
@@ -102,7 +104,7 @@ export default class PieChart extends Component {
     });
 
     this.state = {
-      data: props.data,
+      data,
       pallete: RGBColors,
       topThree,
     };

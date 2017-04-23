@@ -9,6 +9,7 @@ import {
 import { report_const } from './utils/constants';
 import { emotionsAdj } from './utils/emotionList';
 import * as colors from './utils/colors';
+import { parseInfoPanelData } from './utils/utilFunctions';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -32,12 +33,14 @@ const styles = StyleSheet.create({
 export default class ReportInfoPanel extends Component {
   constructor(props) {
     super(props);
+
+    const { initialEmotion, lastEmotion, improvement, duration } = parseInfoPanelData(props);
     
     this.state = {
-      initialEmotion: props.initialEmotion || 'sad',
-      lastEmotion: props.lastEmotion || 'happiness',
-      improvement: props.improvement || 0,
-      duration: props.duration || 0,
+      initialEmotion: initialEmotion || 'sad',
+      lastEmotion: lastEmotion || 'happiness',
+      improvement: improvement || 0,
+      duration: duration || 0,
       speechText: props.speechText || report_const.DEFUALT_SPEECH_TEXT,
     };
   }
@@ -68,7 +71,7 @@ export default class ReportInfoPanel extends Component {
               <Text>Time: {parseInt(duration / 864e5)} min</Text>
             </View>
         }
-        <Text style={{color: '#A8D277'}}>{improvement * 100}% Improvement</Text>
+        <Text style={{color: '#A8D277'}}>{improvement}% Improvement</Text>
         {
           (this.props.concise) ?
             <View>

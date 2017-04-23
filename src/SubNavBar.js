@@ -41,10 +41,18 @@ const styles = StyleSheet.create({
 export default class SubNavBar extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      counts: props.counts || {
+        entries: 0,
+        improvements: 0,
+        streak: 0,
+      }
+    };
   }
 
   render() {
-    const { entries, improvements, streak } = this.props.counts;
+    const { entries, improvements, streak } = this.state.counts;
     return (
       <View style={styles.container}>
         <View style={styles.cell}>

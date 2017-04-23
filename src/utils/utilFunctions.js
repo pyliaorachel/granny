@@ -72,6 +72,35 @@ const parseReportTitleDate = (data) => {
   return `${day}, ${startTime.getDate()} ${months[startTime.getMonth()]} ${startTime.getFullYear()}`;
 };
 
+const parseInfoPanelData = (unparsedData) => {
+  console.log(unparsedData);
+  const { initialData, lastData, data } = unparsedData;
+  let initialEmotion;
+  let lastEmotion;
+  let improvement = unparsedData.improvement;
+
+  if (initialData) {
+    // max initial/last emotion
+    const initialEmotions = initialData.emotions;
+    const lastEmotions = lastData.emotions;
+    const maxInitialEmotion = Math.max.apply(null, Object.values(initialEmotions));
+    const maxLastEmotion = Math.max.apply(null, Object.values(lastEmotions));
+
+    initialEmotion = Object.keys(initialEmotions).filter(x => initialEmotions[x] === maxInitialEmotion)[0];
+    lastEmotion = Object.keys(lastEmotions).filter(x => lastEmotions[x] === maxLastEmotion)[0];
+
+    // improvement
+    if (!improvement) improvement = getEmotionImprovements(initialEmotions, lastEmotions);
+  } else {
+    initialEmotion = lastEmotion = 'happiness';
+    improvement = 0;
+  }
+    // duration
+  const duration = new Date(new Date(data.time.endTime) - new Date(data.time.startTime));
+
+  return { initialEmotion, lastEmotion, improvement, duration };
+};
+
 const getEmotionImprovements = (initialEmotions, lastEmotions) => {
   const initialPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
     return prev + initialEmotions[emotion];
@@ -86,7 +115,7 @@ const getEmotionImprovements = (initialEmotions, lastEmotions) => {
     return prev + lastEmotions[emotion];
   }, 0);
 
-  return (lastPositiveEmotions - initialPositiveEmotions) + (initialNegativeEmotions - lastNegativeEmotions) / 2;
+  return Math.round(((lastPositiveEmotions - initialPositiveEmotions) + (initialNegativeEmotions - lastNegativeEmotions)) * 100 / 2);
 };
 
 module.exports = {
@@ -94,5 +123,6 @@ module.exports = {
   hexToRgba,
   parseChartData,
   parseReportTitleDate,
+  parseInfoPanelData,
   getEmotionImprovements,
 };

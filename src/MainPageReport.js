@@ -67,22 +67,27 @@ export default class MainPageReport extends Component {
     this.pressReport = this.pressReport.bind(this);
     this.renderChart = this.renderChart.bind(this);
     this.renderReportList = this.renderReportList.bind(this);
+    this.retrievedData = this.retrievedData.bind(this);
   }
 
   componentWillMount() {
-    let data;
     switch (this.state.dataType) {
       case DATA_TYPE.DAY:
-        data = api.getDayData();
+        api.getDayData(d = 20).then(this.retrievedData);
         break;
       case DATA_TYPE.MONTH:
-        data = api.getMonthData();
+        api.getMonthData(d = 20).then(this.retrievedData);
         break;
       case DATA_TYPE.YEAR:
-        data = api.getYearData();
+        api.getYearData(d = 20).then(this.retrievedData);
         break;
     }
+  }
+
+  retrievedData(data) {
+    console.log(data);
     const chartData = parseChartData(data.summaryData, this.state.chartType);
+    console.log(chartData);
 
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(data.allData),
@@ -146,8 +151,8 @@ export default class MainPageReport extends Component {
           <View style={styles.titleTextContainer}>
             <Text style={styles.titleText}>{this.state.title}</Text>
           </View>
-          {this.renderChart()}
-          {this.renderReportList()}
+          {(this.state.chartData) ? this.renderChart() : null}
+          {(this.state.allData) ? this.renderReportList() : null}
         </ScrollView>
       </View>
     );

@@ -15,7 +15,7 @@ import ReportInfoPanel from './ReportInfoPanel';
 import * as emotionList from './utils/emotionList';
 import * as sentences from './utils/sentences';
 import { report_const, style_const, navbar_const, enum_const } from './utils/constants';
-import { parseChartData, getEmotionImprovements } from './utils/utilFunctions';
+import { parseChartData, getEmotionImprovements, parseInfoPanelData } from './utils/utilFunctions';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -50,60 +50,15 @@ export default class Report extends Component {
       data: props.data || report_const.DEFAULT_DATA,
       key: props.dataKey,
       parsedData: report_const.DEFAULT_PARSED_DATA,
-      maxEmotion: 'neutral',
-      initialEmotion: props.initialEmotion || 'sad',
-      lastEmotion: props.lastEmotion || 'happiness',
-      improvement: 0,
-      duration: 0,
     };
   }
 
   componentWillMount() {
     // chart data
     let parsedData = parseChartData(this.state.data, enum_const.CHART_TYPE.PIE);
-    //let max = Math.max.apply(null, Object.values(initialEmotions));
-    //let maxEmotion = '';
-    
-
-    if (this.props.data && this.props.data.error) {
-      //maxEmotion = 'error';
-    }
-
-    // info panel data
-    const { initialData, lastData, data } = this.props;
-    let initialEmotion;
-    let lastEmotion;
-    let improvement;
-
-    if (initialData) {
-      // max initial/last emotion
-      const initialEmotions = initialData.emotions;
-      const lastEmotions = lastData.emotions;
-      const maxInitialEmotion = Math.max.apply(null, Object.values(initialEmotions));
-      const maxLastEmotion = Math.max.apply(null, Object.values(lastEmotions));
-
-      initialEmotion = Object.keys(initialEmotions).filter(x => initialEmotions[x] === maxInitialEmotion)[0];
-      lastEmotion = Object.keys(lastEmotions).filter(x => lastEmotions[x] === maxLastEmotion)[0];
-
-      // improvement
-      improvement = getEmotionImprovements(initialEmotions, lastEmotions);
-    } else {
-      initialEmotion = lastEmotion = 'happiness';
-      improvement = 0;
-    }
-      // duration
-    const duration = new Date(new Date(data.time.endTime) - new Date(data.time.startTime));
-
-    this.setState({
-      initialEmotion,
-      lastEmotion,
-      improvement,
-      duration,
-    });
 
     this.setState({
       parsedData,
-      //maxEmotion,
     });
   }
 
@@ -112,7 +67,8 @@ export default class Report extends Component {
   }
 
   render() {
-    const { parsedData, data, initialEmotion, lastEmotion, improvement, duration } = this.state;
+    const { parsedData } = this.state;
+    const { initialData, lastData, data } = this.props;
     return (
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
         <View style={styles.titleTextContainer}>
@@ -120,10 +76,9 @@ export default class Report extends Component {
         </View>
         <PieChart data={parsedData} />
         <ReportInfoPanel 
-          initialEmotion={initialEmotion}
-          lastEmotion={lastEmotion}
-          improvement={improvement}
-          duration={duration}
+          initialData={initialData}
+          lastData={lastData}
+          data={data}
         />
       </ScrollView>
     );
