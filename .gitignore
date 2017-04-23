@@ -54,3 +54,4 @@ fastlane/screenshots
 
 # Others
 config.js
+node_modules
