@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
+import { Spinner } from 'native-base';
 
 import PieChart from './PieChart';
 import StockLineChart from './StockLineChart';
@@ -67,6 +68,7 @@ export default class MainPageReport extends Component {
       y: props.y || now.getFullYear(),
       m: props.m || now.getMonth() + 1,
       d: props.d || now.getDate(),
+      hasData: false,
     };
 
     this.pressReport = this.pressReport.bind(this);
@@ -103,7 +105,8 @@ export default class MainPageReport extends Component {
       this.setState({
         summaryData: {
           meta,
-        }
+        },
+        hasData: true,
       });
     }
 
@@ -118,7 +121,8 @@ export default class MainPageReport extends Component {
         summaryData: {
           ...this.state.summaryData,
           meta,
-        }
+        },
+        hasData: true,
       });
     }
 
@@ -126,6 +130,7 @@ export default class MainPageReport extends Component {
       this.setState({
         dataSource: data.allData && this.state.dataSource.cloneWithRows(data.allData),
         allData: data.allData,
+        hasData: true,
       });
     }
   }
@@ -178,16 +183,25 @@ export default class MainPageReport extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
-        <SubNavBar meta={this.state.summaryData && this.state.summaryData.meta}/>
-        <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
-          <View style={styles.titleTextContainer}>
-            <Text style={styles.titleText}>{this.state.title}</Text>
+      (this.state.hasData) ?
+        (
+          <View style={{flex: 1}}>
+            <SubNavBar meta={this.state.summaryData && this.state.summaryData.meta}/>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
+              <View style={styles.titleTextContainer}>
+                <Text style={styles.titleText}>{this.state.title}</Text>
+              </View>
+              {(this.state.chartData) ? this.renderChart() : null}
+              {(this.state.allData) ? this.renderReportList() : null}
+            </ScrollView>
           </View>
-          {(this.state.chartData) ? this.renderChart() : null}
-          {(this.state.allData) ? this.renderReportList() : null}
-        </ScrollView>
-      </View>
+        )
+      :
+        (
+          <View style={{flex: 1,backgroundColor: style_const.color.BGGrey, justifyContent: 'center', alignItems: 'center'}}>
+            <Spinner color={style_const.color.themeGreen} />
+          </View>
+        )
     );
   }
 }
