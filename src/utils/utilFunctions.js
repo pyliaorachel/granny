@@ -157,6 +157,17 @@ const getPaddingUntil = (dataType, m, y) => {
   return (dataType === DATA_TYPE.MONTH) ? ((m === 2 && isLeapYear(y)) ? 29 : monthDays[m-1]) : 12;
 };
 
+const getMaxEmotion = (data) => {
+  let max = -1; let maxI = -1;
+  emotions.forEach((emotion, i) => {
+    if (data[emotion] >= max) { // choose the more positive ones, so >= instead of >
+      max = sum;
+      maxI = i;
+    }
+  });
+  return emotions[maxI];
+};
+
 module.exports = {
   hexToRgb,
   hexToRgba,
@@ -166,5 +177,6 @@ module.exports = {
   parseReportTitleDate,
   parseInfoPanelData,
   getEmotionImprovement,
-  getPaddingUntil
+  getPaddingUntil,
+  getMaxEmotion,
 };

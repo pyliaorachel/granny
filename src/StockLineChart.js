@@ -38,8 +38,7 @@ export default class StockLineChart extends Component {
     let pallete;
     if (props.data) {
       pallete = props.data.map((item) => {
-        const emotionID = Math.min(item[0].emotionID, item[1].emotionID);
-        const color = colors[emotions[emotionID]];
+        const color = colors[emotions[item[1].emotionID]];
         return rgbaToRgb(hexToRgba(color, 0.5));
       });
     }
