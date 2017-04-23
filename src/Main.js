@@ -16,7 +16,8 @@ import NavBar from './NavBar';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: navbar_const.HEIGHT,
+    paddingTop: navbar_const.HEIGHT,
+    backgroundColor: style_const.color.themeGreen,
   },
   tabsContainerStyle: {
     borderWidth: 0.5,
