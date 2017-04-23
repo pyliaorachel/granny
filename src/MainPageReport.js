@@ -14,7 +14,7 @@ import StockLineChart from './StockLineChart';
 import ReportInfoPanel from './ReportInfoPanel';
 import SubNavBar from './SubNavBar';
 import * as api from './utils/db/api';
-import { parseChartData, parseReportTitleDate } from './utils/utilFunctions';
+import { parseChartData, parseReportTitleDate, getPaddingUntil } from './utils/utilFunctions';
 import { report_const, style_const, navbar_const, enum_const } from './utils/constants';
 
 const { DATA_TYPE, CHART_TYPE } = enum_const;
@@ -54,6 +54,8 @@ export default class MainPageReport extends Component {
     const chartType = (dataType === DATA_TYPE.DAY) ? CHART_TYPE.PIE : CHART_TYPE.STOCK_LINE;
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+    const now = new Date();
+
     this.state = {
       title: title.toUpperCase(),
       dataSource: ds,
@@ -62,6 +64,9 @@ export default class MainPageReport extends Component {
       summaryData: null,
       chartType,
       dataType,
+      y: props.y || now.getFullYear(),
+      m: props.m || now.getMonth() + 1,
+      d: props.d || now.getDate(),
     };
 
     this.pressReport = this.pressReport.bind(this);
@@ -71,21 +76,23 @@ export default class MainPageReport extends Component {
   }
 
   componentWillMount() {
+    const { d, m, y } = this.state;
     switch (this.state.dataType) {
       case DATA_TYPE.DAY:
-        api.getDayData(d = 20).then(this.retrievedData);
+        api.getDayData(20, m, y).then(this.retrievedData);
         break;
       case DATA_TYPE.MONTH:
-        api.getMonthData().then(this.retrievedData);
+        api.getMonthData(m, y).then(this.retrievedData);
         break;
       case DATA_TYPE.YEAR:
-        api.getYearData().then(this.retrievedData);
+        api.getYearData(y).then(this.retrievedData);
         break;
     }
   }
 
   retrievedData(data) {
-    const chartData = parseChartData(data.summaryData, this.state.chartType);
+    const paddingUntil = getPaddingUntil(this.state.dataType, this.state.m, this.state.y);
+    const chartData = parseChartData(data.summaryData, this.state.chartType, paddingUntil);
 
     this.setState({
       dataSource: data.allData && this.state.dataSource.cloneWithRows(data.allData),

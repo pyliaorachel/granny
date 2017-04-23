@@ -42,7 +42,7 @@ const chart_const = {
         top: reportContainerPadding,
         left: reportContainerPadding,
         bottom: reportContainerPadding,
-        right: reportContainerPadding,
+        right: reportContainerPadding + 5,
       },
       animate: {
         type: 'delayed',

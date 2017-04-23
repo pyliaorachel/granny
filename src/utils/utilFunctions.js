@@ -1,8 +1,10 @@
 import { emotions, positiveEmotions, negativeEmotions } from './emotionList';
-import { weekdayNames as weekdays, monthNamesShort as months } from './timeNames';
+import { weekdayNames as weekdays, monthNamesShort as months } from './timeConsts';
 import { enum_const } from './constants';
+import { monthDays } from './timeConsts';
 
-const { CHART_TYPE } = enum_const;
+const { CHART_TYPE, DATA_TYPE } = enum_const;
+
 
 /*
   Converting hex color value to RGB representation.
@@ -26,7 +28,6 @@ const hexToRgb = (hex) => {
     });
 
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    console.log(result);
     return result ? {
         'r': parseInt(result[1], 16),
         'g': parseInt(result[2], 16),
@@ -42,6 +43,11 @@ const hexToRgba = (hex, a) => {
   };
 };
 
+const hexToRgbaStr = (hex, a) => {
+  const rgb = hexToRgb(hex);
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${a})`;
+};
+
 /* source: http://stackoverflow.com/questions/21576092/convert-rgba-to-hex */
 const rgbaToRgb = (color) => {
   const alpha = color.a;
@@ -54,7 +60,7 @@ const rgbaToRgb = (color) => {
   };
 }
 
-const parseChartData = (data, chartType) => {
+const parseChartData = (data, chartType, paddingUntil = 0) => {
   let parsedData = [];
 
   if (chartType === CHART_TYPE.PIE) {
@@ -79,6 +85,15 @@ const parseChartData = (data, chartType) => {
       }
       prev = part;
     });
+    if (parsedData.length < paddingUntil) {
+      for (let i = parsedData.length; i < paddingUntil; i++) {
+        const dummy = {
+          'day': i,
+          'emotionID': 0,
+        };
+        parsedData.push([dummy, dummy]);
+      }
+    }
   }
   return parsedData;
 };
@@ -135,12 +150,22 @@ const getEmotionImprovements = (initialEmotions, lastEmotions) => {
   return Math.round(((lastPositiveEmotions - initialPositiveEmotions) + (initialNegativeEmotions - lastNegativeEmotions)) * 100 / 2);
 };
 
+const isLeapYear = (y) => {
+  return ((y % 4 === 0) && (y % 100 !== 0)) || (y % 400 === 0);
+};
+
+const getPaddingUntil = (dataType, m, y) => {
+  return (dataType === DATA_TYPE.MONTH) ? ((m === 2 && isLeapYear(y)) ? 29 : monthDays[m-1]) : 12;
+};
+
 module.exports = {
   hexToRgb,
   hexToRgba,
+  hexToRgbaStr,
   rgbaToRgb,
   parseChartData,
   parseReportTitleDate,
   parseInfoPanelData,
   getEmotionImprovements,
+  getPaddingUntil
 };

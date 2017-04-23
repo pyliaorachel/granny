@@ -5,7 +5,7 @@ import { Pie } from 'react-native-pathjs-charts';
 import * as colors from './utils/colors';
 import { emotions } from './utils/emotionList';
 import { chart_const, style_const } from './utils/constants';
-import { hexToRgb, hexToRgba } from './utils/utilFunctions';
+import { hexToRgb, hexToRgbaStr } from './utils/utilFunctions';
 
 const neutralImage = require('../assets/emotions/neutral.png');
 const angerImage = require('../assets/emotions/anger.png');
@@ -112,7 +112,7 @@ export default class PieChart extends Component {
 
   render() {
     const { data, pallete, topThree } = this.state;
-    const chartCenterBGColor = hexToRgba(colors[topThree[0].key], 0.6);
+    const chartCenterBGColor = hexToRgbaStr(colors[topThree[0].key], 0.6);
     return (
       <View style={styles.container}>
         <View style={styles.chartContainer}>
