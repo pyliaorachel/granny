@@ -13,9 +13,11 @@ import PieChart from './PieChart';
 import StockLineChart from './StockLineChart';
 import ReportInfoPanel from './ReportInfoPanel';
 import SubNavBar from './SubNavBar';
-import * as API from './utils/API';
+import * as api from './utils/db/api';
 import { parseChartData, parseReportTitleDate } from './utils/utilFunctions';
-import { report_const, style_const, navbar_const } from './utils/constants';
+import { report_const, style_const, navbar_const, enum_const } from './utils/constants';
+
+const { DATA_TYPE, CHART_TYPE } = enum_const;
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -45,9 +47,11 @@ export default class MainPageReport extends Component {
   constructor(props) {
     super(props);
 
-    const title = (props.tabLabel === 'Today') ? report_const.REPORT_TITLE_TODAY : 
-                  ((props.tabLabel === 'This Month') ? report_const.REPORT_TITLE_MONTH : report_const.REPORT_TITLE_ALL_TIME);
-    const chartType = (props.tabLabel === 'Today') ? 'pie' : 'stockLine';
+    const dataType = (props.tabLabel === 'Today') ? DATA_TYPE.DAY : 
+                  ((props.tabLabel === 'This Month') ? DATA_TYPE.MONTH : DATA_TYPE.YEAR);
+    const title = (dataType === DATA_TYPE.DAY) ? report_const.REPORT_TITLE_TODAY : 
+                  ((dataType === DATA_TYPE.MONTH) ? report_const.REPORT_TITLE_MONTH : report_const.REPORT_TITLE_ALL_TIME);
+    const chartType = (dataType === DATA_TYPE.DAY) ? CHART_TYPE.PIE : CHART_TYPE.STOCK_LINE;
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
@@ -57,6 +61,7 @@ export default class MainPageReport extends Component {
       allData: null,
       summaryData: null,
       chartType,
+      dataType,
     };
 
     this.pressReport = this.pressReport.bind(this);
@@ -65,19 +70,29 @@ export default class MainPageReport extends Component {
   }
 
   componentWillMount() {
-    const { summaryData, allData } = API.getMockData(this.state.chartType);
-    const chartData = parseChartData(summaryData, this.state.chartType);
+    let data;
+    switch (this.state.dataType) {
+      case DATA_TYPE.DAY:
+        data = api.getDayData();
+        break;
+      case DATA_TYPE.MONTH:
+        data = api.getMonthData();
+        break;
+      case DATA_TYPE.YEAR:
+        data = api.getYearData();
+        break;
+    }
+    const chartData = parseChartData(data.summaryData, this.state.chartType);
 
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(allData),
+      dataSource: this.state.dataSource.cloneWithRows(data.allData),
       chartData: chartData,
-      allData,
-      summaryData,
+      allData: data.allData,
+      summaryData: data.summaryData,
     });
   }
 
   pressReport(data) {
-    console.log(data);
     Actions.report({
       type: ActionConst.PUSH, 
       data: data.data, 
@@ -92,7 +107,7 @@ export default class MainPageReport extends Component {
 
   renderChart() {
   
-    return (this.state.chartType === 'pie') ? 
+    return (this.state.chartType === CHART_TYPE.PIE) ? 
       <PieChart data={this.state.chartData} />
     :
       <StockLineChart data={this.state.chartData} />

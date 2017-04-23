@@ -14,7 +14,7 @@ import NavBar from './NavBar';
 import ReportInfoPanel from './ReportInfoPanel';
 import * as emotionList from './utils/emotionList';
 import * as sentences from './utils/sentences';
-import { report_const, style_const, navbar_const } from './utils/constants';
+import { report_const, style_const, navbar_const, enum_const } from './utils/constants';
 import { parseChartData, getEmotionImprovements } from './utils/utilFunctions';
 
 const screenHeight = Dimensions.get('window').height;
@@ -60,7 +60,7 @@ export default class Report extends Component {
 
   componentWillMount() {
     // chart data
-    let parsedData = parseChartData(this.state.data, 'pie');
+    let parsedData = parseChartData(this.state.data, enum_const.CHART_TYPE.PIE);
     //let max = Math.max.apply(null, Object.values(initialEmotions));
     //let maxEmotion = '';
     
@@ -108,7 +108,6 @@ export default class Report extends Component {
   }
 
   static renderNavigationBar(props) {
-    console.log(props.leaveAction);
     return (<NavBar leaveAction={props.leaveAction} title={props.title} type={props.navbarType}/>);
   }
 

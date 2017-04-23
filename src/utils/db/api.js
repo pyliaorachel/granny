@@ -1,10 +1,27 @@
 import * as firebase from 'firebase';
 import db from './config';
-import { report_const } from '../constants';
+import { report_const, enum_const } from '../constants';
+
+const { CHART_TYPE } = enum_const;
+
+const getDayData = (d = (new Date().getDate()), m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
+    console.log(y, m, d);
+    return getMockData(CHART_TYPE.PIE);
+};
+
+const getMonthData = (m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
+    console.log(y, m);
+    return getMockData(CHART_TYPE.STOCK_LINE);
+};
+
+const getYearData = (y = (new Date().getFullYear())) => {
+    console.log(y);
+    return getMockData(CHART_TYPE.STOCK_LINE);
+};
 
 const getMockData = (chartType) => {
   let summaryData;
-  if (chartType === 'pie') {
+  if (chartType === CHART_TYPE.PIE) {
     summaryData = {
       ...report_const.DEFAULT_DATA,
       counts: {
@@ -79,5 +96,7 @@ const getMockData = (chartType) => {
 };
 
 module.exports = {
-    getMockData,
+    getDayData,
+    getMonthData,
+    getYearData,
 };

@@ -1,5 +1,8 @@
 import { emotions, positiveEmotions, negativeEmotions } from './emotionList';
 import { weekdayNames as weekdays, monthNamesShort as months } from './timeNames';
+import { enum_const } from './constants';
+
+const { CHART_TYPE } = enum_const;
 
 /*
   Converting hex color value to RGB representation.
@@ -37,9 +40,8 @@ const hexToRgba = (hex, a) => {
 
 const parseChartData = (data, chartType) => {
   let parsedData = [];
-  console.log('data', data);
-  console.log(chartType);
-  if (chartType === 'pie') {
+
+  if (chartType === CHART_TYPE.PIE) {
     const dataEmotions = data.emotions;
     emotions.forEach((emotion) => {
       const part = {
@@ -71,7 +73,6 @@ const parseReportTitleDate = (data) => {
 };
 
 const getEmotionImprovements = (initialEmotions, lastEmotions) => {
-  console.log(initialEmotions);
   const initialPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
     return prev + initialEmotions[emotion];
   }, 0);

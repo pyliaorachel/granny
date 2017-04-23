@@ -42,7 +42,6 @@ const getGraphDataDay = (memberID, year, month, day) => {
 }
 
 module.exports = {
-  db,
   getMemberStart,
   getMember,
   createMember,

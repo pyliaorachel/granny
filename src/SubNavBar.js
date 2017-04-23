@@ -78,7 +78,7 @@ export default class SubNavBar extends Component {
             color='rgba(255, 255, 255, 0.6)'
           />
           <View>
-            <Text style={styles.number}>{streak}</Text>
+            <Text style={styles.number}>{streak} day{(streak === 1 ? '' : 's')}</Text>
             <Text style={styles.title}>STREAK</Text>
           </View>
         </View>

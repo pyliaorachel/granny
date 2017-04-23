@@ -38,8 +38,8 @@ export default class StockLineChart extends Component {
   }
 
   render() {
-    const { data, pallete } = this.state;
-    console.log(pallete);
+    const { data } = this.state;
+
     return (
       <View style={styles.container}>
         <View style={styles.chartContainer}>

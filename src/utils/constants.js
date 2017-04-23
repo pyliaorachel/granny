@@ -208,4 +208,15 @@ module.exports = {
       BGGrey: '#EEEEEE',
     }
   },
+  enum_const: {
+    DATA_TYPE: {
+      DAY: 0,
+      MONTH: 1,
+      YEAR: 2,
+    },
+    CHART_TYPE: {
+      PIE: 0,
+      STOCK_LINE: 1,
+    }
+  }
 };
