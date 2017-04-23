@@ -18,8 +18,8 @@ export default class Root extends Component {
         <Scene key="settings" component={SettingsDrawer} open={false} >
           <Scene key="root">
             <Scene key='main' component={Main} title='granny' />
-            <Scene key='room' component={Room}  hideNavBar/>
-            <Scene key='report' component={Report} title='Report' />
+            <Scene key='room' component={Room}  hideNavBar direction='vertical' />
+            <Scene key='report' component={Report} title='Report' direction='vertical' />
             <Scene key='account' component={Account} />
           </Scene>
         </Scene>

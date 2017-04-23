@@ -146,7 +146,7 @@ export default class MainPageReport extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <SubNavBar counts={this.state.summaryData && this.state.summaryData.counts}/>
+        <SubNavBar meta={this.state.summaryData && this.state.summaryData.meta}/>
         <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
           <View style={styles.titleTextContainer}>
             <Text style={styles.titleText}>{this.state.title}</Text>

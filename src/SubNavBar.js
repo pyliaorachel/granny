@@ -43,7 +43,7 @@ export default class SubNavBar extends Component {
     super(props);
 
     this.state = {
-      counts: props.counts || {
+      meta: props.meta || {
         entries: 0,
         improvements: 0,
         streak: 0,
@@ -51,8 +51,16 @@ export default class SubNavBar extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    if (!this.state.meta !== props.meta) {
+      this.setState({
+        meta: {...props.meta}
+      });
+    }
+  }
+
   render() {
-    const { entries, improvements, streak } = this.state.counts;
+    const { entries, improvements, streak } = this.state.meta;
     return (
       <View style={styles.container}>
         <View style={styles.cell}>
