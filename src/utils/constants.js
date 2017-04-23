@@ -183,6 +183,9 @@ module.exports = {
     }
   },
   chart_const,
+  drawer_const: {
+    HEIGHT: 50,
+  },
   granny_const: {
     BOUNCING_DURATION: 1500,
   },
@@ -202,6 +205,7 @@ module.exports = {
     },
     color: {
       themeGreen: '#11B2B2',
+      BGGrey: '#EEEEEE',
     }
   },
 };

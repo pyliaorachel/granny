@@ -12,10 +12,11 @@
     "react-native-animatable": "^1.1.0",
     "react-native-audio": "git+https://github.com/jsierles/react-native-audio.git",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "react-native-drawer": "^2.3.0",
     "react-native-fetch-blob": "^0.10.2-beta.6",
     "react-native-pathjs-charts": "0.0.27",
     "react-native-router-flux": "^3.37.0",
-    "react-native-scrollable-tab-view": "^0.6.5",
+    "react-native-scrollable-tab-view": "git+https://github.com/pyliaorachel/react-native-scrollable-tab-view.git",
     "react-native-tts": "^1.0.0",
     "react-native-vector-icons": "^4.0.1"
   },

@@ -45,6 +45,7 @@ export default class Main extends Component {
     super(props);
 
     this.startNewRecord = this.startNewRecord.bind(this);
+    console.log(props);
   }
 
   static renderNavigationBar(props) {

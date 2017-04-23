@@ -44,7 +44,7 @@ export default class NavBar extends Component {
     super(props);
 
     this.settings = this.settings.bind(this);
-    //this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
+    this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
   }
 
   handleLeaveButtonClick() {
@@ -52,7 +52,7 @@ export default class NavBar extends Component {
   }
 
   settings() {
-    console.log('settings');
+    Actions.refresh({key: 'settings', open: value => !value});
   }
 
   render() {
