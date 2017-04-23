@@ -76,21 +76,19 @@ export default class MainPageReport extends Component {
         api.getDayData(d = 20).then(this.retrievedData);
         break;
       case DATA_TYPE.MONTH:
-        api.getMonthData(d = 20).then(this.retrievedData);
+        api.getMonthData().then(this.retrievedData);
         break;
       case DATA_TYPE.YEAR:
-        api.getYearData(d = 20).then(this.retrievedData);
+        api.getYearData().then(this.retrievedData);
         break;
     }
   }
 
   retrievedData(data) {
-    console.log(data);
     const chartData = parseChartData(data.summaryData, this.state.chartType);
-    console.log(chartData);
 
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(data.allData),
+      dataSource: data.allData && this.state.dataSource.cloneWithRows(data.allData),
       chartData: chartData,
       allData: data.allData,
       summaryData: data.summaryData,
@@ -111,7 +109,6 @@ export default class MainPageReport extends Component {
   }
 
   renderChart() {
-  
     return (this.state.chartType === CHART_TYPE.PIE) ? 
       <PieChart data={this.state.chartData} />
     :

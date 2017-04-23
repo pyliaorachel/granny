@@ -26,6 +26,7 @@ const hexToRgb = (hex) => {
     });
 
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    console.log(result);
     return result ? {
         'r': parseInt(result[1], 16),
         'g': parseInt(result[2], 16),
@@ -35,8 +36,23 @@ const hexToRgb = (hex) => {
 
 const hexToRgba = (hex, a) => {
   const rgb = hexToRgb(hex);
-  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${a})`;
+  return {
+    ...rgb,
+    a,
+  };
 };
+
+/* source: http://stackoverflow.com/questions/21576092/convert-rgba-to-hex */
+const rgbaToRgb = (color) => {
+  const alpha = color.a;
+  const bg = {r: 255, g: 255, b: 255};
+
+  return {
+      'r': (1 - alpha) * bg.r + alpha * color.r,
+      'g': (1 - alpha) * bg.g + alpha * color.g,
+      'b': (1 - alpha) * bg.b + alpha * color.b
+  };
+}
 
 const parseChartData = (data, chartType) => {
   let parsedData = [];
@@ -52,17 +68,18 @@ const parseChartData = (data, chartType) => {
     });
   } else {
     const dataEmotions = data.emotions;
-    let parsedLineData = []
+    let prev = null;
     dataEmotions.forEach((emotion, i) => {
       const part = {
         'day': i + 1,
         'emotionID': emotions.indexOf(emotion),
       };
-      parsedLineData.push(part);
+      if (prev) {
+        parsedData.push([prev, part]);
+      }
+      prev = part;
     });
-    parsedData.push(parsedLineData);
   }
-
   return parsedData;
 };
 
@@ -121,6 +138,7 @@ const getEmotionImprovements = (initialEmotions, lastEmotions) => {
 module.exports = {
   hexToRgb,
   hexToRgba,
+  rgbaToRgb,
   parseChartData,
   parseReportTitleDate,
   parseInfoPanelData,

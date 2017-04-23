@@ -34,7 +34,7 @@ const chart_const = {
       }
     },
     stockLine: {
-      width: screenWidth - reportContainerPadding * 2,
+      width: screenWidth - reportContainerPadding * 4,
       height: chartSize,
       color: '#11B2B2',
       opacity: 1,
@@ -42,7 +42,7 @@ const chart_const = {
         top: reportContainerPadding,
         left: reportContainerPadding,
         bottom: reportContainerPadding,
-        right: 0
+        right: reportContainerPadding,
       },
       animate: {
         type: 'delayed',

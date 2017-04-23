@@ -13,7 +13,6 @@ const summaries = userJournals.child('summaries');
 const getDayData = (d = (new Date().getDate()), m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
   return Promise.all([summaries.child(`day/${d}`).once('value'), entries.child(`${y}/${m}/${d}`).once('value')])
     .then(snapshots => {
-      console.log(snapshots);
       return {
         summaryData: snapshots[0].val(),
         allData: snapshots[1].val(),
@@ -22,13 +21,21 @@ const getDayData = (d = (new Date().getDate()), m = (new Date().getMonth() + 1),
 };
 
 const getMonthData = (m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
-    console.log(y, m);
-    return getMockData(CHART_TYPE.STOCK_LINE);
+  return summaries.child(`month/${m}`).once('value')
+    .then(snapshot => {
+      return {
+        summaryData: snapshot.val(),
+      };
+    });
 };
 
 const getYearData = (y = (new Date().getFullYear())) => {
-    console.log(y);
-    return getMockData(CHART_TYPE.STOCK_LINE);
+  return summaries.child(`year/${y}`).once('value')
+    .then(snapshot => {
+      return {
+        summaryData: snapshot.val(),
+      };
+    });
 };
 
 const getMockData = (chartType) => {

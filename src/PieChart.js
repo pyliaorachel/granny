@@ -87,7 +87,7 @@ export default class PieChart extends Component {
     super(props);
     const data = props.data.slice().sort((a, b) => emotions.indexOf(a.name) - emotions.indexOf(b.name));
 
-    const RGBColors = emotions.map((emotion) => {
+    const pallete = emotions.map((emotion) => {
       const color = colors[emotion];
       return hexToRgb(color);
     });
@@ -105,7 +105,7 @@ export default class PieChart extends Component {
 
     this.state = {
       data,
-      pallete: RGBColors,
+      pallete,
       topThree,
     };
   }

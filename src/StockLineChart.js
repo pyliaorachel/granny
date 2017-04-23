@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 
 import { StockLine } from 'react-native-pathjs-charts';
-import { chart_const, style_const } from './utils/constants'
+import { hexToRgba, rgbaToRgb } from './utils/utilFunctions';
+import { chart_const, style_const } from './utils/constants';
+import { emotions } from './utils/emotionList';
+import * as colors from './utils/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,13 +35,23 @@ export default class StockLineChart extends Component {
   constructor(props) {
     super(props);
 
+    let pallete;
+    if (props.data) {
+      pallete = props.data.map((item) => {
+        const emotionID = Math.min(item[0].emotionID, item[1].emotionID);
+        const color = colors[emotions[emotionID]];
+        return rgbaToRgb(hexToRgba(color, 0.5));
+      });
+    }
+
     this.state = {
       data: props.data,
+      pallete,
     };
   }
 
   render() {
-    const { data } = this.state;
+    const { data, pallete } = this.state;
 
     return (
       <View style={styles.container}>
@@ -48,6 +61,7 @@ export default class StockLineChart extends Component {
             options={chart_const.chart_options.stockLine}
             xKey='day'
             yKey='emotionID'
+            pallete={pallete}
           />
         </View>
     </View>
