@@ -105,7 +105,6 @@ const parseReportTitleDate = (data) => {
 };
 
 const parseInfoPanelData = (unparsedData) => {
-  console.log(unparsedData);
   const { initialData, lastData, data } = unparsedData;
   let initialEmotion;
   let lastEmotion;
@@ -122,7 +121,7 @@ const parseInfoPanelData = (unparsedData) => {
     lastEmotion = Object.keys(lastEmotions).filter(x => lastEmotions[x] === maxLastEmotion)[0];
 
     // improvement
-    if (!improvement) improvement = getEmotionImprovements(initialEmotions, lastEmotions);
+    if (!improvement) improvement = getEmotionImprovement(initialEmotions, lastEmotions);
   } else {
     initialEmotion = lastEmotion = 'happiness';
     improvement = 0;
@@ -133,7 +132,7 @@ const parseInfoPanelData = (unparsedData) => {
   return { initialEmotion, lastEmotion, improvement, duration };
 };
 
-const getEmotionImprovements = (initialEmotions, lastEmotions) => {
+const getEmotionImprovement = (initialEmotions, lastEmotions) => {
   const initialPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
     return prev + initialEmotions[emotion];
   }, 0);
@@ -166,6 +165,6 @@ module.exports = {
   parseChartData,
   parseReportTitleDate,
   parseInfoPanelData,
-  getEmotionImprovements,
+  getEmotionImprovement,
   getPaddingUntil
 };

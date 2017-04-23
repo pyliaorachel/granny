@@ -48,7 +48,17 @@ export default class NavBar extends Component {
   }
 
   handleLeaveButtonClick() {
-    (this.props.leaveAction && this.props.leaveAction()) || Actions.popTo('main');
+    if (this.props.leaveAction) {
+      this.props.leaveAction();
+    } else {
+      if (this.props.leaveType === navbar_const.type.CLOSE) {
+        if (this.props.isUpdated) {
+          Actions.refresh({key: 'main', isUpdated: true});
+        } else {
+          Actions.popTo('main');
+        }
+      }
+    }
   }
 
   settings() {
@@ -59,7 +69,7 @@ export default class NavBar extends Component {
     return (
       <View style={styles.container}>
         {
-          (this.props.type === navbar_const.type.MAIN) ? 
+          (this.props.leaveType === navbar_const.type.MAIN) ? 
             <TouchableHighlight style={styles.navBarIconContainer} underlayColor='transparent' onPress={() => {this.settings()}}>
               <Icon
                   name='gear'
@@ -76,7 +86,7 @@ export default class NavBar extends Component {
         }
         <Text style={styles.title}>{this.props.title}</Text>
         {
-          (this.props.type === navbar_const.type.CLOSE) ? 
+          (this.props.leaveType === navbar_const.type.CLOSE) ? 
             <TouchableHighlight style={styles.navBarIconContainer} underlayColor='transparent' onPress={() => {this.handleLeaveButtonClick()}}>
               <Icon
                   name='close'

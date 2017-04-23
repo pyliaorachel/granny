@@ -102,7 +102,7 @@ module.exports = {
   },
   timeout_const: {
     END_TALK_TIMEOUT: 3000,
-    OPENING_TIMEOUT: 10000,
+    OPENING_TIMEOUT: 5000,
   },
   config_const: {
     TTS_DEFAULT_RATE: 0.4,

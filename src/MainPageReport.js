@@ -73,33 +73,46 @@ export default class MainPageReport extends Component {
     this.renderChart = this.renderChart.bind(this);
     this.renderReportList = this.renderReportList.bind(this);
     this.retrievedData = this.retrievedData.bind(this);
+    this.getData = this.getData.bind(this);
   }
 
   componentWillMount() {
+    this.getData();
+  }
+
+  getData() {
     const { d, m, y } = this.state;
     switch (this.state.dataType) {
       case DATA_TYPE.DAY:
-        api.getDayData(20, m, y).then(this.retrievedData);
+        api.getDayData(this.retrievedData, d, m, y);
         break;
       case DATA_TYPE.MONTH:
-        api.getMonthData(m, y).then(this.retrievedData);
+        api.getMonthData(this.retrievedData, m, y);
         break;
       case DATA_TYPE.YEAR:
-        api.getYearData(y).then(this.retrievedData);
+        api.getYearData(this.retrievedData, y);
         break;
     }
   }
 
   retrievedData(data) {
-    const paddingUntil = getPaddingUntil(this.state.dataType, this.state.m, this.state.y);
-    const chartData = parseChartData(data.summaryData, this.state.chartType, paddingUntil);
+    console.log('retrieved data', data);
+    if (data.summaryData) {
+      const paddingUntil = getPaddingUntil(this.state.dataType, this.state.m, this.state.y);
+      const chartData = parseChartData(data.summaryData, this.state.chartType, paddingUntil);
 
-    this.setState({
-      dataSource: data.allData && this.state.dataSource.cloneWithRows(data.allData),
-      chartData: chartData,
-      allData: data.allData,
-      summaryData: data.summaryData,
-    });
+      this.setState({
+        chartData: chartData,
+        summaryData: data.summaryData,
+      });
+    }
+
+    if (data.allData) {
+      this.setState({
+        dataSource: data.allData && this.state.dataSource.cloneWithRows(data.allData),
+        allData: data.allData,
+      });
+    }
   }
 
   pressReport(data) {
@@ -112,6 +125,7 @@ export default class MainPageReport extends Component {
       lastData: data.lastData,
       leaveAction: Actions.pop,
       navbarType: navbar_const.type.CLOSE,
+      transcript: data.transcript,
     });
   }
 

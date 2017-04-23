@@ -7,7 +7,6 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 
 import PieChart from './PieChart';
 import NavBar from './NavBar';
@@ -15,7 +14,8 @@ import ReportInfoPanel from './ReportInfoPanel';
 import * as emotionList from './utils/emotionList';
 import * as sentences from './utils/sentences';
 import { report_const, style_const, navbar_const, enum_const } from './utils/constants';
-import { parseChartData, getEmotionImprovements, parseInfoPanelData } from './utils/utilFunctions';
+import { parseChartData, parseInfoPanelData } from './utils/utilFunctions';
+import * as api from './utils/db/api';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -60,10 +60,20 @@ export default class Report extends Component {
     this.setState({
       parsedData,
     });
+
+    //if (this.props.isNewJourney) {
+      const { initialData, lastData, data, transcript } = this.props;
+      api.uploadJourney({
+        initialData: initialData || false, 
+        lastData: lastData || false, 
+        data: data || false, 
+        transcript: transcript || false,
+      });
+    //}
   }
 
   static renderNavigationBar(props) {
-    return (<NavBar leaveAction={props.leaveAction} title={props.title} type={props.navbarType}/>);
+    return (<NavBar leaveAction={props.leaveAction} title={props.title} leaveType={props.navbarType} isUpdated={props.isUpdated} />);
   }
 
   render() {

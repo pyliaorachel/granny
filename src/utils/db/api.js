@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import db from './config';
 import { report_const, enum_const } from '../constants';
+import { getEmotionImprovement } from '../utilFunctions';
 
 const { CHART_TYPE } = enum_const;
 
@@ -10,32 +11,25 @@ const userJournals = db.ref(`user-journals/${userID}`);
 const entries = userJournals.child('entries');
 const summaries = userJournals.child('summaries');
 
-const getDayData = (d = (new Date().getDate()), m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
-  return Promise.all([summaries.child(`day/${d}`).once('value'), entries.child(`${y}/${m}/${d}`).once('value')])
-    .then(snapshots => {
-      return {
-        summaryData: snapshots[0].val(),
-        allData: snapshots[1].val(),
-      };
-    });
+const getDayData = (cb, d = (new Date().getDate()), m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
+  summaries.child(`day/${d}`).on('value', (snapshot) => {
+    return cb({ summaryData: snapshot.val() });
+  });
+  entries.child(`${y}/${m}/${d}`).on('value', (snapshot) => {
+    return cb({ allData: snapshot.val() });
+  });
 };
 
-const getMonthData = (m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
-  return summaries.child(`month/${m}`).once('value')
-    .then(snapshot => {
-      return {
-        summaryData: snapshot.val(),
-      };
-    });
+const getMonthData = (cb, m = (new Date().getMonth() + 1), y = (new Date().getFullYear())) => {
+  summaries.child(`month/${m}`).on('value', (snapshot) => {
+    return cb({ summaryData: snapshot.val() });
+  });
 };
 
-const getYearData = (y = (new Date().getFullYear())) => {
-  return summaries.child(`year/${y}`).once('value')
-    .then(snapshot => {
-      return {
-        summaryData: snapshot.val(),
-      };
-    });
+const getYearData = (cb, y = (new Date().getFullYear())) => {
+  summaries.child(`year/${y}`).on('value', (snapshot) => {
+    return cb({ summaryData: snapshot.val() });
+  });
 };
 
 const getMockData = (chartType) => {
@@ -114,8 +108,27 @@ const getMockData = (chartType) => {
   };
 };
 
+const uploadJourney = (data) => {
+  // post data
+  const improvement = getEmotionImprovement(data.initialData.emotions, data.lastData.emotions);
+  const postData = Object.assign({}, data, {
+    improvement,
+  });
+
+  // path
+  const endTime = (data.data) ? new Date(data.data.time.endTime) : new Date();
+  const y = endTime.getFullYear();
+  const m = endTime.getMonth() + 1;
+  const d = endTime.getDate();
+
+  const path = `${y}/${m}/${d}`;
+  const newEntry = entries.child(path).push();
+  newEntry.set(postData);
+};
+
 module.exports = {
     getDayData,
     getMonthData,
     getYearData,
+    uploadJourney,
 };

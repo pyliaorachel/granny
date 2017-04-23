@@ -46,15 +46,16 @@ export default class Main extends Component {
     super(props);
 
     this.startNewRecord = this.startNewRecord.bind(this);
-    console.log(props);
   }
 
   static renderNavigationBar(props) {
-    return (<NavBar title={props.title} type={navbar_const.type.MAIN} />);
+    return (<NavBar title={props.title} leaveType={navbar_const.type.MAIN} />);
   }
 
-  componentWillMount() {
-    Actions.refresh();
+  componentWillReceiveProps(props) {
+    if (props.isUpdated) {
+      Actions.refresh({isUpdated: false});
+    }
   }
 
   startNewRecord() {
