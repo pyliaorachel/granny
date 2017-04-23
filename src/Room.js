@@ -15,7 +15,7 @@ import * as Animatable from 'react-native-animatable';
 
 import Granny from './Granny';
 import * as colors from './utils/colors';
-import { interval_const, timeout_const, config_const, granny_const, env_const } from './utils/constants';
+import { interval_const, timeout_const, config_const, granny_const, env_const, navbar_const } from './utils/constants';
 import { OcpApimSubscriptionKey } from '../config';
 import { parseReportTitleDate } from './utils/utilFunctions';
 
@@ -95,6 +95,7 @@ export default class Room extends Component {
       containerStyle: StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}]),
       currentQuestion: 0,
       totalQuestions: questions.length,
+      audioIsStarted: false,
     };
 
     TTS.setDefaultLanguage(config_const.TTS_DEFAULT_LANG);
@@ -112,13 +113,16 @@ export default class Room extends Component {
     DeviceEventEmitter.addListener('recordingProgress', this.captureBackground);
 
     AudioRecorder.startRecording();
+    this.setState({audioIsStarted: true});
 
     this.setupAnimation();
   }
 
   componentWillUnmount() {
     clearInterval(this.state.captureImageInterval);
-    AudioRecorder.stopRecording();
+    if (this.state.audioIsStarted) {
+      this.setState({audioIsStarted: false}, AudioRecorder.stopRecording);
+    }
   }
 
   prepareRecordingPath(audioPath){
@@ -236,13 +240,13 @@ export default class Room extends Component {
 
     setTimeout(() => {
       Actions.report({
-        type: ActionConst.PUSH, 
         data, 
         dataKey: this.state.key, 
         title: parseReportTitleDate(data), 
         hideNavBar: false,
         initialData: this.state.initialData,
         lastData: this.state.lastData,
+        navbarType: navbar_const.type.CLOSE,
     });
     }, timeout_const.END_TALK_TIMEOUT);
   }

@@ -3,8 +3,11 @@ import {
   View,
   StyleSheet,
   Text,
+  TouchableHighlight,
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Actions } from 'react-native-router-flux';
 
 import MainPageReport from './MainPageReport';
 import { navbar_const, style_const } from './utils/constants';
@@ -24,21 +27,36 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   startRecordButton: {
-    backgroundColor: 'red',
-    elevation: 2,
-    width: 50,
-    height: 50,
+    backgroundColor: style_const.color.themeGreen,
+    elevation: 3,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     position: 'absolute',
+    bottom: 15,
+    right: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
 export default class Main extends Component {
   constructor(props) {
     super(props);
+
+    this.startNewRecord = this.startNewRecord.bind(this);
   }
 
   static renderNavigationBar(props) {
     return (<NavBar title={props.title} type={navbar_const.type.MAIN} />);
+  }
+
+  componentWillMount() {
+    Actions.refresh();
+  }
+
+  startNewRecord() {
+    Actions.room();
   }
 
   render() {
@@ -56,7 +74,17 @@ export default class Main extends Component {
           <MainPageReport tabLabel='This Month' />
           <MainPageReport tabLabel='All Time' />
         </ScrollableTabView>
-        {/*<View style={styles.startRecordButton}></View>*/}
+        <TouchableHighlight 
+          style={styles.startRecordButton}
+          underlayColor={style_const.color.themeGreen}
+          onPress={this.startNewRecord}
+        >
+          <Icon
+              name='md-mic'
+              size={35}
+              color='rgba(255, 255, 255, 0.4)'
+          />
+        </TouchableHighlight>
       </View>
     );
   }

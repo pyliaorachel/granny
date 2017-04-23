@@ -71,19 +71,26 @@ export default class Report extends Component {
 
     // info panel data
     const { initialData, lastData, data } = this.props;
+    let initialEmotion;
+    let lastEmotion;
+    let improvement;
 
+    if (initialData) {
       // max initial/last emotion
-    const initialEmotions = initialData.emotions;
-    const lastEmotions = lastData.emotions;
-    const maxInitialEmotion = Math.max.apply(null, Object.values(initialEmotions));
-    const maxLastEmotion = Math.max.apply(null, Object.values(lastEmotions));
+      const initialEmotions = initialData.emotions;
+      const lastEmotions = lastData.emotions;
+      const maxInitialEmotion = Math.max.apply(null, Object.values(initialEmotions));
+      const maxLastEmotion = Math.max.apply(null, Object.values(lastEmotions));
 
-    const initialEmotion = Object.keys(initialEmotions).filter(x => initialEmotions[x] === maxInitialEmotion)[0];
-    const lastEmotion = Object.keys(lastEmotions).filter(x => lastEmotions[x] === maxLastEmotion)[0];
+      initialEmotion = Object.keys(initialEmotions).filter(x => initialEmotions[x] === maxInitialEmotion)[0];
+      lastEmotion = Object.keys(lastEmotions).filter(x => lastEmotions[x] === maxLastEmotion)[0];
 
       // improvement
-    const improvement = getEmotionImprovements(initialEmotions, lastEmotions);
-
+      improvement = getEmotionImprovements(initialEmotions, lastEmotions);
+    } else {
+      initialEmotion = lastEmotion = 'happiness';
+      improvement = 0;
+    }
       // duration
     const duration = new Date(new Date(data.time.endTime) - new Date(data.time.startTime));
 

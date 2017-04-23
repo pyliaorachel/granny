@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/EvilIcons';
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 
 import { report_const, style_const, navbar_const } from './utils/constants';
 
@@ -44,11 +44,11 @@ export default class NavBar extends Component {
     super(props);
 
     this.settings = this.settings.bind(this);
-    this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
+    //this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
   }
 
   handleLeaveButtonClick() {
-    this.props.leaveAction() || Actions.main();
+    (this.props.leaveAction && this.props.leaveAction()) || Actions.popTo('main');
   }
 
   settings() {
