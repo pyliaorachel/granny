@@ -52,12 +52,6 @@ export default class Main extends Component {
     return (<NavBar title={props.title} leaveType={navbar_const.type.MAIN} />);
   }
 
-  componentWillReceiveProps(props) {
-    if (props.isUpdated) {
-      Actions.refresh({isUpdated: false});
-    }
-  }
-
   startNewRecord() {
     Actions.room();
   }

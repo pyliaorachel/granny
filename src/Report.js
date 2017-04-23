@@ -73,7 +73,7 @@ export default class Report extends Component {
   }
 
   static renderNavigationBar(props) {
-    return (<NavBar leaveAction={props.leaveAction} title={props.title} leaveType={props.navbarType} isUpdated={props.isUpdated} />);
+    return (<NavBar leaveAction={props.leaveAction} title={props.title} leaveType={props.navbarType} />);
   }
 
   render() {

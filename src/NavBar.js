@@ -52,11 +52,7 @@ export default class NavBar extends Component {
       this.props.leaveAction();
     } else {
       if (this.props.leaveType === navbar_const.type.CLOSE) {
-        if (this.props.isUpdated) {
-          Actions.refresh({key: 'main', isUpdated: true});
-        } else {
-          Actions.popTo('main');
-        }
+        Actions.popTo('main');
       }
     }
   }

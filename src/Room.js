@@ -250,7 +250,6 @@ export default class Room extends Component {
         navbarType: navbar_const.type.CLOSE,
         isNewJourney: true,
         transcript: null, // to be substituted with real data
-        isUpdated: true,
     });
     }, timeout_const.END_TALK_TIMEOUT);
   }
