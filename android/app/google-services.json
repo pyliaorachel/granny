@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1096562355103",
+    "firebase_url": "https://granny-9da5e.firebaseio.com",
+    "project_id": "granny-9da5e",
+    "storage_bucket": "granny-9da5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096562355103:android:fa0fe4b9cb6249f1",
+        "android_client_info": {
+          "package_name": "com.granny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096562355103-g141nuvr2eoi496b3ppfh2ih01iamc8v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt6zCWsa0VXp1uYRiygEgwetW0qu2Fx8M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

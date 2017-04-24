@@ -144,3 +144,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+// For Google Firebase
+apply plugin: 'com.google.gms.google-services'
