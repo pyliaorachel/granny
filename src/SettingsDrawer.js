@@ -31,8 +31,8 @@ export default class SettingsDrawer extends Component {
         content={<SideMenu />}
         tapToClose={true}
         openDrawerOffset={0.3}
-        panCloseMask={1}
         negotiatePan={true}
+        elevation={3}
         tweenHandler={(ratio) => ({
           main: { opacity:Math.max(0.3,1-ratio) }
       })}>

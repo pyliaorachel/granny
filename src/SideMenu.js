@@ -97,7 +97,7 @@ export default class SideMenu extends Component {
               (
                 <Text style={styles.text}>Login</Text>
               ) : 
-                <Text style={styles.text}>Logout <Text style={styles.email}>{this.state.member.email}</Text></Text>
+                <Text numberOfLines={1} ellipsizeMode='middle' style={styles.text}>Logout <Text style={styles.email}>{this.state.member.email}</Text></Text>
             }
           </View>
         </TouchableOpacity>
