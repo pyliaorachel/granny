@@ -59,17 +59,20 @@ export default class Main extends Component {
 
   componentWillReceiveProps(props) {
     if (props.member) {
-      tthis.setState({ UID: member.uid });
+      console.log('member', member.uid);
+      this.setState({ UID: member.uid });
     }
   }
 
   componentWillMount() {
-    const member = Auth.getMember();
-    if (member) {
-      this.setState({ UID: member.uid });
-    } else{
-      Actions.account();
-    }
+    Auth.getMemberStart(member => {
+      console.log('member', member);
+      if (member) {
+        this.setState({ UID: member.uid });
+      } else{
+        Actions.account();
+      }
+    });
   }
 
   startNewRecord() {
@@ -87,9 +90,9 @@ export default class Main extends Component {
           tabBarActiveTextColor='white'
           tabBarInactiveTextColor='rgba(255, 255, 255, 0.8)'
         >
-          <MainPageReport tabLabel='Today' />
-          <MainPageReport tabLabel='This Month' />
-          <MainPageReport tabLabel='All Time' />
+          <MainPageReport tabLabel='Today' UID={this.state.UID} />
+          <MainPageReport tabLabel='This Month' UID={this.state.UID} />
+          <MainPageReport tabLabel='All Time' UID={this.state.UID} />
         </ScrollableTabView>
         <TouchableHighlight 
           style={styles.startRecordButton}

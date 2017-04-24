@@ -4,20 +4,57 @@ import {
   TextInput,
   View,
   StyleSheet,
-  Button,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   AppRegistry,
   AsyncStorage,
   dismissKeyboard,
+  Image,
 } from 'react-native';
-import { Container, Content, InputGroup, Input, Item } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
 import DismissKeyboard from 'dismissKeyboard';
 import * as Auth from './utils/db/authentication';
+import { navbar_const, style_const } from './utils/constants';
 import * as colors from './utils/colors';
-import { navbar_const } from './utils/constants';
 import NavBar from './NavBar';
+
+const HAPPY_GRANNY = require('../assets/emotions/happy.png');
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 30,
+    backgroundColor: style_const.color.BGGrey,
+  },
+  imageStyle: {
+    width: 200,
+    height: 200,
+    margin: 30,
+    alignSelf: 'center',
+  },
+  btn: {
+    backgroundColor: style_const.color.themeGreen,
+    margin: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    alignItems: 'center',
+    borderRadius: 3,
+  },
+  btnText: {
+    fontSize: 16,
+    color: 'white',
+  },
+  inputText: {
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  error: {
+    color: 'rgba(237, 47, 47, 0.6)'
+  }
+});
 
 export default class Account extends Component {
 
@@ -26,8 +63,7 @@ export default class Account extends Component {
 
     this.state = {
       email: '',
-      password: '',
-      response: '',
+      error: '',
     };
 
     this.signup = this.signup.bind(this);
@@ -41,70 +77,56 @@ export default class Account extends Component {
   signup() {
     DismissKeyboard();
     
-    Auth.createMember(this.state.email, this.state.password)
+    Auth.createMember(this.state.email)
       .then(() => {
         const member = Auth.getMember();
         if (member) {
-          Actions.refresh({ member: member });
+          Actions.popTo('main');
         }
       })
       .catch ((error) => {
         console.log(error);
+        this.setState({error: error.message});
       });
   }
 
   login() {
     DismissKeyboard();
 
-    Auth.logInMember(this.state.email, this.state.password)
+    Auth.logInMember(this.state.email)
       .then(() => {
         const member = Auth.getMember();
         if (member) {
-          Actions.refresh({ member: member });
+          Actions.popTo('main');
         }
       })
       .catch ((error) => {
         console.log(error);
+        this.setState({error: error.message});
       });
   }
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => DismissKeyboard()}>
-        {/*<Container>
-          <Content>​
-            <Item regular>
-              <Input 
-                onChangeText={(email) => this.setState({email})}
-                value={this.state.email}
-                keyboardType='email-address'
-                placeholder='Email Address'
-              />
-            </Item>
-          </Content>
-        </Container>*/}
-        <View style={{paddingTop: navbar_const.HEIGHT}}>
-            <Text>Log In or Sign Up!</Text>
-            <TextInput
-              onChangeText={(email) => this.setState({email})}
-              value={this.state.email}
-              keyboardType='email-address'
-              placeholder='Email Address'
-            />
-            <TextInput
-              onChangeText={(password) => this.setState({password})}
-              value={this.state.password}
-              secureTextEntry={true}
-              placeholder='Password'
-            />
-            <Button
-              onPress={this.signup}
-              title='Sign Up'
-              color={colors.neutral} />
-            <Button
-              onPress={this.login}
-              title='Log In'
-              color={colors.neutral} />
+        <View style={styles.container}>
+          <Image style={styles.imageStyle} source={HAPPY_GRANNY} />
+          <TextInput
+            style={styles.inputText}
+            onChangeText={(email) => this.setState({email})}
+            value={this.state.email}
+            keyboardType='email-address'
+            placeholder='granny@example.com'
+            autoCorrect={false}
+            underlineColorAndroid={style_const.color.themeGreen}
+          />
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={this.signup}
+          >
+            <Text style={styles.btnText}>Start Journey!</Text>
+          </TouchableOpacity>
+          <Text style={styles.error}>{this.state.error}</Text>
         </View>
       </TouchableWithoutFeedback>
     );

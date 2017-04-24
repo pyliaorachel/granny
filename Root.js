@@ -20,7 +20,7 @@ export default class Root extends Component {
             <Scene key='main' component={Main} title='granny' />
             <Scene key='room' component={Room}  hideNavBar direction='vertical' />
             <Scene key='report' component={Report} title='Report' direction='vertical' />
-            <Scene key='account' component={Account} title='Login/Signup' direction='vertical' />
+            <Scene key='account' component={Account} title='Welcome' direction='vertical' />
           </Scene>
         </Scene>
       </Router>

@@ -9,11 +9,11 @@ const getMember = () => {
   return firebase.auth().currentUser;
 }
 
-const createMember = (e, p) => {
+const createMember = (e, p = 'granny') => {
   return firebase.auth().createUserWithEmailAndPassword(e, p);
 }
 
-const logInMember = (e, p) => {
+const logInMember = (e, p = 'granny') => {
   return firebase.auth().signInWithEmailAndPassword(e, p);
 }
 

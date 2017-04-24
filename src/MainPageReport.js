@@ -18,6 +18,7 @@ import SubNavBar from './SubNavBar';
 import * as api from './utils/db/api';
 import { parseChartData, parseReportTitleDate, getPaddingUntil } from './utils/utilFunctions';
 import { report_const, style_const, navbar_const, enum_const, timeout_const } from './utils/constants';
+import * as Auth from './utils/db/authentication';
 
 const { DATA_TYPE, CHART_TYPE } = enum_const;
 const ERROR_GRANNY_IMAGE = require('../assets/emotions/surprised.png');
@@ -82,6 +83,7 @@ export default class MainPageReport extends Component {
       d: props.d || now.getDate(),
       hasData: false,
       stopSpinning: false,
+      UID: props.UID,
     };
 
     this.pressReport = this.pressReport.bind(this);
@@ -91,13 +93,35 @@ export default class MainPageReport extends Component {
     this.getData = this.getData.bind(this);
   }
 
+  componentWillReceiveProps(props) {
+    console.log('props', props);
+    if (props.UID !== this.state.UID) {
+      console.log('new uid', props.UID);
+      this.setState({ UID: props.UID });
+      this.getData();
+        setTimeout(() => {
+          if (!this.state.hasData) {
+            this.setState({ stopSpinning: true });
+          }
+        }, timeout_const.RETRIEVE_DATA_TIMEOUT);
+    }
+  }
+
   componentWillMount() {
-    this.getData();
-    setTimeout(() => {
-      if (!this.state.hasData) {
-        this.setState({ stopSpinning: true });
-      }
-    }, timeout_const.RETRIEVE_DATA_TIMEOUT);
+    const member = Auth.getMember();
+    if (member) {
+      this.setState({ UID: member.uid }, () => {
+        this.getData();
+        setTimeout(() => {
+          if (!this.state.hasData) {
+            this.setState({ stopSpinning: true });
+          }
+        }, timeout_const.RETRIEVE_DATA_TIMEOUT);
+      });
+
+    } else{
+      this.setState({ stopSpinning: true });
+    }
   }
 
   getData() {

@@ -3,10 +3,11 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import * as Auth from './utils/db/authentication';
+import { Actions } from 'react-native-router-flux';
 
 import { style_const, drawer_const } from './utils/constants';
 
@@ -49,14 +50,25 @@ export default class SideMenu extends Component {
   }
 
   componentWillMount() {
-    const member = Auth.getMember();
-    if (member) {
-      this.setState({ UID: member.UID });
-    }
+    Auth.getMemberStart(member => {
+      console.log('member', member);
+      if (member) {
+        this.setState({ UID: member.uid });
+      }
+    });
   }
 
   logInOut() {
     console.log('uid', this.state.UID);
+    if (this.state.UID === '') {
+      Actions.account();
+    } else {
+      this.setState({ UID: '' });
+      Auth.logOutMember().then(() => {
+        console.log('Logged out');
+        Actions.refresh({key: 'settings', open: value => !value});
+      }).catch((err) => console.log(err));
+    }
   }
 
   changePin() {
@@ -67,7 +79,7 @@ export default class SideMenu extends Component {
     const { UID } = this.state;
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={() => this.logInOut()}>
+        <TouchableOpacity onPress={() => this.logInOut()}>
           <View style={styles.cell}>
             <Icon
                   name='login'
@@ -76,10 +88,10 @@ export default class SideMenu extends Component {
               />
             <Text style={styles.text}>{(UID === '') ? 'Login' : 'Logout'}</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
         {
           (UID !== '') ?
-            <TouchableHighlight onPress={() => this.changePin()}>
+            <TouchableOpacity onPress={() => this.changePin()}>
               <View style={styles.cell}>
                 <Icon
                       name='key'
@@ -88,7 +100,7 @@ export default class SideMenu extends Component {
                   />
                 <Text style={styles.text}>Change PIN</Text>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           :
             null
         }

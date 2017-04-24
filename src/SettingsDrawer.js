@@ -22,7 +22,7 @@ export default class SettingsDrawer extends Component {
     const children = state.children;
     return (
       <Drawer
-        ref='navigation'
+        ref='drawer'
         styles={styles}
         open={state.open}
         onOpen={()=>Actions.refresh({key:state.key, open: true})}
