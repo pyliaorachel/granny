@@ -34,6 +34,10 @@ const styles = StyleSheet.create({
     color: 'black',
     opacity: 0.6,
   },
+  email: {
+    color: style_const.color.themeGreen,
+    opacity: 1,
+  },
 });
 
 export default class SideMenu extends Component {
@@ -43,6 +47,7 @@ export default class SideMenu extends Component {
 
     this.state = {
       UID: '',
+      member: null,
     };
 
     this.logInOut = this.logInOut.bind(this);
@@ -53,7 +58,7 @@ export default class SideMenu extends Component {
     Auth.getMemberStart(member => {
       console.log('member', member);
       if (member) {
-        this.setState({ UID: member.uid });
+        this.setState({ UID: member.uid, member });
       }
     });
   }
@@ -61,9 +66,10 @@ export default class SideMenu extends Component {
   logInOut() {
     console.log('uid', this.state.UID);
     if (this.state.UID === '') {
-      Actions.account();
+      Actions.refresh({key: 'settings', open: value => !value});
+      setTimeout(() => Actions.account(), 0);
     } else {
-      this.setState({ UID: '' });
+      this.setState({ UID: '', member: null });
       Auth.logOutMember().then(() => {
         console.log('Logged out');
         Actions.refresh({key: 'settings', open: value => !value});
@@ -86,7 +92,13 @@ export default class SideMenu extends Component {
                   size={20}
                   style={styles.icon}
               />
-            <Text style={styles.text}>{(UID === '') ? 'Login' : 'Logout'}</Text>
+            {
+              (UID === '') ? 
+              (
+                <Text style={styles.text}>Login</Text>
+              ) : 
+                <Text style={styles.text}>Logout <Text style={styles.email}>{this.state.member.email}</Text></Text>
+            }
           </View>
         </TouchableOpacity>
         {

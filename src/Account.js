@@ -86,7 +86,11 @@ export default class Account extends Component {
       })
       .catch ((error) => {
         console.log(error);
-        this.setState({error: error.message});
+        if (error.code === 'auth/email-already-in-use') {
+          this.login();
+        } else {
+          this.setState({error: error.message});
+        }
       });
   }
 
