@@ -9,15 +9,83 @@
 			"opening": {
 				"type": "res",
 				"res": {
-					"pos": [
-						"That’s great to hear. From 1-10, how strong is the emotion you are feeling?"
-					],
-					"neg": [
-						"That’s unfortunate to hear. From 1-10, how strong is the emotion you are feeling?"
-					]
+					"Good": {
+						"color": "#ffc107",
+						"text-color": "white",
+						"related-emotion": "happiness",
+						"text": [
+							"That’s great to hear."
+						]
+					},
+					"Umm...": {
+						"color": "#e91e63",
+						"text-color": "white",
+						"related-emotion": "fear",
+						"text": [
+							"That’s unfortunate to hear."
+						]
+					}
 				},
 				"text": [
 					"How are you feeling?"
+				]
+			},
+			"emotion-level": {
+				"type": "res",
+				"res": {
+					"1": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"2": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"3": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"4": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"5": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"6": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"7": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"8": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"9": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					},
+					"10": {
+						"color": "white",
+						"related-emotion": "surprise",
+						"text": [""]
+					}
+				},
+				"text": [
+					"From 1 to 10, how strong is the emotion you are feeling?"
 				]
 			},
 			"context": {
@@ -68,14 +136,20 @@
 			"further-action": {
 				"type": "res",
 				"res": {
-					"yes": [
-						"What is it you’d like to talk about more?"
-					],
-					"no": [
-						"Let me know whenever you want to talk. I am here for you.",
-						"Bye for now. But check in with me whenever.",
-						"Let me know how you’re doing tomorrow. Bye for now."
-					]
+					"Yes": {
+						"color": "#ffc107",
+						"text-color": "white",
+						"text": ["What is it you’d like to talk about more?"]
+					},
+					"No": {
+						"color": "#e91e63",
+						"text-color": "white",
+						"text": [
+							"Let me know whenever you want to talk. I am here for you.",
+							"Bye for now. But check in with me whenever.",
+							"Let me know how you’re doing tomorrow. Bye for now."
+						]
+					}
 				},
 				"text": [
 					"Is there more you’d like to talk about?"

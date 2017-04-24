@@ -54,6 +54,7 @@ export default class Report extends Component {
   }
 
   componentWillMount() {
+    console.log('hi', this.state.data, this.props);
     // chart data
     let parsedData = parseChartData(this.state.data, enum_const.CHART_TYPE.PIE);
 

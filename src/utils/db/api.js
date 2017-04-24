@@ -124,8 +124,9 @@ const getMockData = (chartType) => {
 };
 
 const uploadJourney = (data) => {
+  console.log('upload', data)
   // post data
-  const improvement = getEmotionImprovement(data.initialData.emotions, data.lastData.emotions);
+  const improvement = getEmotionImprovement(data.initialData, data.lastData);
   const postData = Object.assign({}, data, {
     improvement,
   });

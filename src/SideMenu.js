@@ -101,21 +101,19 @@ export default class SideMenu extends Component {
             }
           </View>
         </TouchableOpacity>
-        {
-          (UID !== '') ?
-            <TouchableOpacity onPress={() => this.changePin()}>
-              <View style={styles.cell}>
-                <Icon
-                      name='key'
-                      size={20}
-                      style={styles.icon}
-                  />
-                <Text style={styles.text}>Change PIN</Text>
-              </View>
-            </TouchableOpacity>
-          :
-            null
-        }
+        {/*(UID !== '') ?
+          <TouchableOpacity onPress={() => this.changePin()}>
+            <View style={styles.cell}>
+              <Icon
+                    name='key'
+                    size={20}
+                    style={styles.icon}
+                />
+              <Text style={styles.text}>Change PIN</Text>
+            </View>
+          </TouchableOpacity>
+        :
+          null*/}
       </View>
     );
   }

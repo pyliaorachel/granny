@@ -98,7 +98,7 @@ module.exports = {
     }
   },
   interval_const: {
-    CAPTURE_IMAGE_INTERVAL: 10000,
+    CAPTURE_IMAGE_INTERVAL: 3000,
   },
   timeout_const: {
     END_TALK_TIMEOUT: 3000,
@@ -143,6 +143,16 @@ module.exports = {
         endTime: '2017-02-21T14:55:31'
       },
       improvement: 0,
+    },
+    DEFAULT_EMOTION_DATA: {
+      happiness: 0.5,
+      sadness: 0.2,
+      anger: 0.1,
+      fear: 0.05,
+      surprise: 0.05,
+      contempt: 0.05,
+      disgust: 0.05,
+      neutral: 0.00,
     },
     DEFAULT_MONTH_DATA: [
       'happiness', 'sadness', 'anger', 'neutral', 
@@ -189,6 +199,8 @@ module.exports = {
   },
   granny_const: {
     BOUNCING_DURATION: 1500,
+    HEIGHT: 606,
+    WIDTH: 483,
   },
   env_const: {
     WINDOW_WIDTH: screenWidth,

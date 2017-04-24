@@ -32,8 +32,8 @@ const windowWidth = env_const.WINDOW_WIDTH;
 const windowHeight = env_const.WINDOW_HEIGHT;
 
 const dimensions = {
-  grannyWidth: windowWidth - 50,
-  grannyHeight: (windowWidth - 50) * 606 / 483,
+  grannyWidth: windowWidth - 100,
+  grannyHeight: (windowWidth - 100) * granny_const.HEIGHT / granny_const.WIDTH,
 };
 
 const styles = StyleSheet.create({

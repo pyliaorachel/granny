@@ -61,6 +61,7 @@ const rgbaToRgb = (color) => {
 }
 
 const parseChartData = (data, chartType, paddingUntil = 0) => {
+  console.log('parsechartdata', data);
   let parsedData = [];
 
   if (chartType === CHART_TYPE.PIE) {
@@ -95,6 +96,7 @@ const parseChartData = (data, chartType, paddingUntil = 0) => {
       }
     }
   }
+  console.log('parsed', parsedData);
   return parsedData;
 };
 
@@ -112,8 +114,8 @@ const parseInfoPanelData = (unparsedData) => {
 
   if (initialData) {
     // max initial/last emotion
-    const initialEmotions = initialData.emotions;
-    const lastEmotions = lastData.emotions;
+    const initialEmotions = initialData;
+    const lastEmotions = lastData;
     const maxInitialEmotion = Math.max.apply(null, Object.values(initialEmotions));
     const maxLastEmotion = Math.max.apply(null, Object.values(lastEmotions));
 
@@ -133,6 +135,7 @@ const parseInfoPanelData = (unparsedData) => {
 };
 
 const getEmotionImprovement = (initialEmotions, lastEmotions) => {
+  console.log('improvement', initialEmotions, lastEmotions);
   const initialPositiveEmotions = positiveEmotions.reduce((prev, emotion) => {
     return prev + initialEmotions[emotion];
   }, 0);

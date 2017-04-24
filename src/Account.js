@@ -15,7 +15,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 import DismissKeyboard from 'dismissKeyboard';
 import * as Auth from './utils/db/authentication';
-import { navbar_const, style_const } from './utils/constants';
+import { navbar_const, style_const, granny_const } from './utils/constants';
 import * as colors from './utils/colors';
 import NavBar from './NavBar';
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     width: 200,
-    height: 200,
+    height: 200 * granny_const.HEIGHT / granny_const.WIDTH,
     margin: 30,
     alignSelf: 'center',
   },

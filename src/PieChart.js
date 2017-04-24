@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Platform, Image } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts';
 import * as colors from './utils/colors';
 import { emotions } from './utils/emotionList';
-import { chart_const, style_const } from './utils/constants';
+import { chart_const, style_const, granny_const } from './utils/constants';
 import { hexToRgb, hexToRgbaStr } from './utils/utilFunctions';
 
 const neutralImage = require('../assets/emotions/neutral.png');
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   chartCenterImage: {
     width: CHART_CENTER_SIZE - 30,
-    height: CHART_CENTER_SIZE - 30,
+    height: (CHART_CENTER_SIZE - 30) * granny_const.HEIGHT / granny_const.WIDTH,
   },
   legendsContainer: {
     //flex: 1,
@@ -94,7 +94,11 @@ export default class PieChart extends Component {
 
     const emotionSum = props.data.reduce((prev, item) => prev + item.score, 0);
 
-    const topThree = props.data.slice().sort((a, b) => b.score - a.score).slice(0, 3).map((item) => {
+    const topThree = props.data.slice().sort((a, b) => {
+      return ((b.score - a.score) === 0) 
+          ? (emotions.indexOf(b.name) - emotions.indexOf(a.name)) // break tie by prioritizing pos emotions 
+         : (b.score - a.score);
+    }).slice(0, 3).map((item) => {
       const noremalizedScore = item.score / emotionSum;
       console.log('normalized', noremalizedScore);
       return {

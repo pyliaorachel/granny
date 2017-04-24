@@ -17,7 +17,7 @@ import ReportInfoPanel from './ReportInfoPanel';
 import SubNavBar from './SubNavBar';
 import * as api from './utils/db/api';
 import { parseChartData, parseReportTitleDate, getPaddingUntil } from './utils/utilFunctions';
-import { report_const, style_const, navbar_const, enum_const, timeout_const } from './utils/constants';
+import { report_const, style_const, navbar_const, enum_const, timeout_const, granny_const } from './utils/constants';
 import * as Auth from './utils/db/authentication';
 
 const { DATA_TYPE, CHART_TYPE } = enum_const;
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     width: 200,
-    height: 200,
+    height: 200 * granny_const.HEIGHT / granny_const.WIDTH,
     margin: 30,
   },
   errorText: {

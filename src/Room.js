@@ -14,6 +14,7 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import * as Animatable from 'react-native-animatable';
 
 import Granny from './Granny';
+import Options from './Options';
 import * as colors from './utils/colors';
 import { interval_const, timeout_const, config_const, granny_const, env_const, navbar_const, report_const } from './utils/constants';
 import { OcpApimSubscriptionKey } from '../config';
@@ -32,7 +33,7 @@ const dimensions = {
 };
 
 const jumpingGrannyImage = require('../assets/opening/jumping-granny.png');
-const questions = require('./utils/questions_dev.json').questions;
+const questions = require('./utils/questions.json').questions.main;
 
 const styles = StyleSheet.create({
   container: {
@@ -93,9 +94,13 @@ export default class Room extends Component {
       ttsFinishListener: null,
       grannyEmotion: 'neutral',
       containerStyle: StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}]),
-      currentQuestion: 0,
-      totalQuestions: questions.length,
+      currentQuestionID: 0,
+      totalQuestions: Object.keys(questions).length,
+      questionKeys: Object.keys(questions),
       audioIsStarted: false,
+      options: null,
+      optionRes: (() => {}),
+      shouldSetOptions: false,
     };
 
     TTS.setDefaultLanguage(config_const.TTS_DEFAULT_LANG);
@@ -106,6 +111,8 @@ export default class Room extends Component {
     this.captureSound = this.captureSound.bind(this);
     this.startTalk = this.startTalk.bind(this);
     this.finishQuestion = this.finishQuestion.bind(this);
+    this.speakRandomQuestion = this.speakRandomQuestion.bind(this);
+    this.chooseOption = this.chooseOption.bind(this);
   }
 
   componentDidMount() {
@@ -169,29 +176,70 @@ export default class Room extends Component {
     }
   }
 
+  speakRandomQuestion(textGroup) {
+    const text = textGroup[ Math.floor(Math.random() * textGroup.length) ];
+    TTS.speak(text);
+  }
+
+  chooseOption(options) {
+    return new Promise((res, rej) => {
+      this.setState({
+        shouldSetOptions: true,
+        options: options,
+        optionRes: res,
+      });
+    });
+  }
+
   nextQuestion() {
     console.log('nextQuestion');
-    const { currentQuestion, totalQuestions } = this.state;
+    const { currentQuestionID, totalQuestions, questionKeys } = this.state;
 
-    if (currentQuestion >= totalQuestions) {
+    if (currentQuestionID >= totalQuestions) {
       this.endTalk();
       return;
     }
 
-    const question = questions[this.state.currentQuestion];
+    const question = questions[questionKeys[this.state.currentQuestionID]];
     this.setState({
-      currentQuestion: this.state.currentQuestion+1,
+      currentQuestionID: this.state.currentQuestionID+1,
     });
-    console.log(currentQuestion, totalQuestions, question);
+    console.log(currentQuestionID, totalQuestions, question);
 
-    TTS.speak(question);
+    if (question.type === "n") {
+      this.speakRandomQuestion(question.text);
+    } else if (question.type === "seq") {
+      question.text.forEach((textGroup) => {
+        this.speakRandomQuestion(textGroup);
+      });
+    } else if (question.type === "res") {
+      this.speakRandomQuestion(question.text);
+      this.chooseOption(question.res)
+        .then(({option, emotion}) => {
+          console.log('option', option, emotion);
+          this.speakRandomQuestion(question.res[option].text);
+          if (emotion) this.setState({grannyEmotion: emotion});
+          this.setState({
+            options: null,
+            optionRes: (() => {}),
+          }, () => {
+            this.finishQuestion();
+          });
+        });
+    }
   }
 
   finishQuestion() {
     console.log('finishQuestion');
-    this.setState({
-      nextQuestion: false,
-    });
+    if (!this.state.options && !this.state.shouldSetOptions) { // is not choosing an option
+      this.setState({
+        nextQuestion: false,
+      });
+    } else if (this.state.shouldSetOptions) {
+      this.setState({
+        shouldSetOptions: false,
+      });
+    }
   }
 
   endTalk() {
@@ -203,7 +251,7 @@ export default class Room extends Component {
 
     // normalize emotion
     const emotionData = this.state.emotionData;
-    console.log(emotionData);
+    console.log(Object.assign({}, emotionData));
     let sum = 0;
 
     Object.keys(emotionData).forEach((key) => {
@@ -221,6 +269,7 @@ export default class Room extends Component {
       });
       error = true
     }
+    console.log('parsed', emotionData)
 
     // parse data
     const data = {
@@ -238,6 +287,7 @@ export default class Room extends Component {
     if (this.state.audioIsStarted) {
       this.setState({audioIsStarted: false}, AudioRecorder.stopRecording);
     }
+    TTS.removeEventListener('tts-finish', this.finishQuestion),
 
     setTimeout(() => {
       Actions.report({
@@ -245,8 +295,8 @@ export default class Room extends Component {
         dataKey: this.state.key, 
         title: parseReportTitleDate(data), 
         hideNavBar: false,
-        initialData: this.state.initialData || report_const.DEFAULT_DATA,
-        lastData: this.state.lastData || report_const.DEFAULT_DATA,
+        initialData: this.state.initialData || report_const.DEFAULT_EMOTION_DATA,
+        lastData: this.state.lastData || report_const.DEFAULT_EMOTION_DATA,
         navbarType: navbar_const.type.CLOSE,
         isNewJourney: true,
         transcript: null, // to be substituted with real data
@@ -319,6 +369,7 @@ export default class Room extends Component {
   }
 
   render() {
+    console.log('should set', this.state.shouldSetOptions);
     return (
       this.state.setup ?
         <View style={StyleSheet.flatten([styles.container, {backgroundColor: colors['neutral']}])}>
@@ -331,6 +382,7 @@ export default class Room extends Component {
       :
         <View style={StyleSheet.flatten([styles.container, {backgroundColor: colors[this.state.grannyEmotion]}])}>
           <Granny emotion={this.state.grannyEmotion}/>
+          {(!this.state.shouldSetOptions && this.state.options) ? <Options options={this.state.options} res={this.state.optionRes}/> : null}
           <Camera
             ref={(cam) => {
               this.camera = cam;
