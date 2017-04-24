@@ -4,12 +4,15 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import * as Auth from './utils/db/authentication';
 import { Actions } from 'react-native-router-flux';
+import * as colors from './utils/colors';
 
-import { style_const, drawer_const } from './utils/constants';
+import { style_const, drawer_const, granny_const } from './utils/constants';
+const HAPPY_GRANNY = require('../assets/emotions/happy.png');
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +41,17 @@ const styles = StyleSheet.create({
     color: style_const.color.themeGreen,
     opacity: 1,
   },
+  imageStyle: {
+    width: 60,
+    height: 60 * granny_const.HEIGHT / granny_const.WIDTH,
+    margin: 10,
+    alignSelf: 'center',
+  },
+  imageContainer: {
+    borderBottomWidth: 1,
+    borderColor: '#eeeeee',
+    backgroundColor: colors.happiness,
+  }
 });
 
 export default class SideMenu extends Component {
@@ -85,6 +99,9 @@ export default class SideMenu extends Component {
     const { UID } = this.state;
     return (
       <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.imageStyle} source={HAPPY_GRANNY} />
+        </View>
         <TouchableOpacity onPress={() => this.logInOut()}>
           <View style={styles.cell}>
             <Icon
