@@ -161,7 +161,7 @@ const getMaxEmotion = (data) => {
   let max = -1; let maxI = -1;
   emotions.forEach((emotion, i) => {
     if (data[emotion] >= max) { // choose the more positive ones, so >= instead of >
-      max = sum;
+      max = data[emotion];
       maxI = i;
     }
   });

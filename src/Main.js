@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux';
 
 import * as Auth from './utils/db/authentication';
+import * as api from './utils/db/api';
 import MainPageReport from './MainPageReport';
 import { navbar_const, style_const } from './utils/constants';
 import NavBar from './NavBar';
@@ -68,6 +69,7 @@ export default class Main extends Component {
     Auth.getMemberStart(member => {
       console.log('member', member);
       if (member) {
+        api.setUserID(member.uid);
         this.setState({ UID: member.uid });
       } else{
         Actions.account();

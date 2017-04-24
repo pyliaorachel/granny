@@ -94,23 +94,21 @@ export default class MainPageReport extends Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log('props', props);
     if (props.UID !== this.state.UID) {
-      console.log('new uid', props.UID);
-      this.setState({ UID: props.UID });
+      this.setState({ UID: props.UID, stopSpinning: false });
       this.getData();
-        setTimeout(() => {
-          if (!this.state.hasData) {
-            this.setState({ stopSpinning: true });
-          }
-        }, timeout_const.RETRIEVE_DATA_TIMEOUT);
+      setTimeout(() => {
+        if (!this.state.hasData) {
+          this.setState({ stopSpinning: true });
+        }
+      }, timeout_const.RETRIEVE_DATA_TIMEOUT);
     }
   }
 
   componentWillMount() {
     const member = Auth.getMember();
     if (member) {
-      this.setState({ UID: member.uid }, () => {
+      this.setState({ UID: member.uid, stopSpinning: false }, () => {
         this.getData();
         setTimeout(() => {
           if (!this.state.hasData) {

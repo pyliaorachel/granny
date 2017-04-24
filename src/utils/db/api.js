@@ -6,11 +6,19 @@ import { getEmotionImprovement, getMaxEmotion } from '../utilFunctions';
 
 const { CHART_TYPE } = enum_const;
 
-const mockUserID = 'abcde';
-let userID = mockUserID;
-const userJournals = db.ref(`user-journals/${userID}`);
-const entries = userJournals.child('entries');
-const summaries = userJournals.child('summaries');
+let userID = '';
+let userJournals = db.ref(`user-journals/${userID}`);
+let entries = userJournals.child('entries');
+let summaries = userJournals.child('summaries');
+
+const setUserID = (UID) => {
+  if (userID !== UID) {
+    userID = UID;
+    userJournals = db.ref(`user-journals/${userID}`);
+    entries = userJournals.child('entries');
+    summaries = userJournals.child('summaries');
+  }
+};
 
 const getDayMetaData = (cb) => {
   summaries.child(`day/meta`).on('value', (snapshot) => {
@@ -287,6 +295,7 @@ const uploadJourney = (data) => {
 };
 
 module.exports = {
+  setUserID,
   getDayMetaData,
   getDayData,
   getMonthData,

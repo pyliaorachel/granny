@@ -61,7 +61,7 @@ export default class Report extends Component {
       parsedData,
     });
 
-    //if (this.props.isNewJourney) {
+    if (this.props.isNewJourney) {
       const { initialData, lastData, data, transcript } = this.props;
       api.uploadJourney({
         initialData: initialData || false, 
@@ -69,7 +69,7 @@ export default class Report extends Component {
         data: data || false, 
         transcript: transcript || false,
       });
-    //}
+    }
   }
 
   static renderNavigationBar(props) {
