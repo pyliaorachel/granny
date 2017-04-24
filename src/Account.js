@@ -10,10 +10,14 @@ import {
   AsyncStorage,
   dismissKeyboard,
 } from 'react-native';
+import { Container, Content, InputGroup, Input, Item } from 'native-base';
+
 import { Actions } from 'react-native-router-flux';
 import DismissKeyboard from 'dismissKeyboard';
 import * as Auth from './utils/db/authentication';
 import * as colors from './utils/colors';
+import { navbar_const } from './utils/constants';
+import NavBar from './NavBar';
 
 export default class Account extends Component {
 
@@ -30,59 +34,56 @@ export default class Account extends Component {
     this.login = this.login.bind(this);
   }
 
-  componentWillMount(){
-    // check login status
-    const member = Auth.getMemberStart();
-    if (member) {
-      console.log(`${member} is already logged in.`);
-      Actions.main({ member: member });
-    } else{
-      console.log('New user. Need to log-in or sign-up.');
-    }
+  static renderNavigationBar(props) {
+    return (<NavBar title={props.title} leaveType={navbar_const.type.CLOSE} />);
   }
 
-  async signup() {
+  signup() {
     DismissKeyboard();
-    try {
-      await Auth.createMember(this.state.email, this.state.password);
-
-      this.setState({
-        response: 'Account created! Logging In...'
-      });
-
-      setTimeout(() => {
+    
+    Auth.createMember(this.state.email, this.state.password)
+      .then(() => {
         const member = Auth.getMember();
-        Actions.main({ member: member });
-      }, 1000);
-    } catch (error) {
-      this.setState({
-        response: error.toString()
+        if (member) {
+          Actions.refresh({ member: member });
+        }
       })
-    }
+      .catch ((error) => {
+        console.log(error);
+      });
   }
 
-  async login() {
+  login() {
     DismissKeyboard();
-    try {
-      await Auth.logInMember(this.state.email, this.state.password);
-      this.setState({
-        response: 'Logging In...'
-      });
-      setTimeout(() => {
+
+    Auth.logInMember(this.state.email, this.state.password)
+      .then(() => {
         const member = Auth.getMember();
-        Actions.main({ member: member });
-      }, 1000);
-    } catch (error) {
-      this.setState({
-        response: error.toString()
+        if (member) {
+          Actions.refresh({ member: member });
+        }
       })
-    }
+      .catch ((error) => {
+        console.log(error);
+      });
   }
 
   render() {
     return (
-      <TouchableWithoutFeedback onPress={() => {DismissKeyboard()}}>
-        <View>
+      <TouchableWithoutFeedback onPress={() => DismissKeyboard()}>
+        {/*<Container>
+          <Content>​
+            <Item regular>
+              <Input 
+                onChangeText={(email) => this.setState({email})}
+                value={this.state.email}
+                keyboardType='email-address'
+                placeholder='Email Address'
+              />
+            </Item>
+          </Content>
+        </Container>*/}
+        <View style={{paddingTop: navbar_const.HEIGHT}}>
             <Text>Log In or Sign Up!</Text>
             <TextInput
               onChangeText={(email) => this.setState({email})}
@@ -104,7 +105,6 @@ export default class Account extends Component {
               onPress={this.login}
               title='Log In'
               color={colors.neutral} />
-            <Text>{this.state.response}</Text>
         </View>
       </TouchableWithoutFeedback>
     );

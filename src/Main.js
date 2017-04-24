@@ -9,6 +9,7 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux';
 
+import * as Auth from './utils/db/authentication';
 import MainPageReport from './MainPageReport';
 import { navbar_const, style_const } from './utils/constants';
 import NavBar from './NavBar';
@@ -45,11 +46,30 @@ export default class Main extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      UID: null,
+    };
+
     this.startNewRecord = this.startNewRecord.bind(this);
   }
 
   static renderNavigationBar(props) {
     return (<NavBar title={props.title} leaveType={navbar_const.type.MAIN} />);
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.member) {
+      tthis.setState({ UID: member.uid });
+    }
+  }
+
+  componentWillMount() {
+    const member = Auth.getMember();
+    if (member) {
+      this.setState({ UID: member.uid });
+    } else{
+      Actions.account();
+    }
   }
 
   startNewRecord() {

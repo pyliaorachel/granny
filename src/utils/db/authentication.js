@@ -1,52 +1,30 @@
 import * as firebase from 'firebase';
 import db from './config';
 
-const getMemberStart = () => {
-  firebase.auth().onAuthStateChanged((user) => {
-    return user;
-  });
+const getMemberStart = (cb) => {
+  firebase.auth().onAuthStateChanged(cb);
 }
 
 const getMember = () => {
-  const user = firebase.auth().currentUser;
-  return user;
+  return firebase.auth().currentUser;
 }
 
 const createMember = (e, p) => {
-  firebase.auth().createUserWithEmailAndPassword(e, p);
+  return firebase.auth().createUserWithEmailAndPassword(e, p);
 }
 
 const logInMember = (e, p) => {
-  firebase.auth().signInWithEmailAndPassword(e, p);
+  return firebase.auth().signInWithEmailAndPassword(e, p);
 }
 
-const getJournalEntry = (memberID, year, month, day, id) => {
-  const JEPath = `/JournalEntry/${memberID}/${year}/${month}/${day}/${id}`;
-  db.ref(JEPath).on('value', (snapshot) => {
-    return snapshot.val() || '';
-  });
-}
-
-const getGraphDataMonth = (memberID, year, month) => {
-  let GDMPath = `/GraphDataMonth/${memberID}/${year}/${month}`;
-  db.ref(GDMPath).on('value', (snapshot) => {
-    return snapshot.val() || '';
-  });
-}
-
-const getGraphDataDay = (memberID, year, month, day) => {
-  let GDDPath = `/GraphDataMonth/${memberID}/${year}/${month}/${day}`;
-  db.ref(GDDPath).on('value', (snapshot) => {
-    return snapshot.val() || '';
-  });
-}
+const logOutMember = () => {
+  return firebase.auth().signOut();
+};
 
 module.exports = {
   getMemberStart,
   getMember,
   createMember,
   logInMember,
-  getJournalEntry,
-  getGraphDataMonth,
-  getGraphDataDay,
+  logOutMember,
 };

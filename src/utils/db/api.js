@@ -7,7 +7,7 @@ import { getEmotionImprovement, getMaxEmotion } from '../utilFunctions';
 const { CHART_TYPE } = enum_const;
 
 const mockUserID = 'abcde';
-const userID = mockUserID;
+let userID = mockUserID;
 const userJournals = db.ref(`user-journals/${userID}`);
 const entries = userJournals.child('entries');
 const summaries = userJournals.child('summaries');
