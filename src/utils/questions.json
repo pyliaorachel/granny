@@ -6,54 +6,79 @@
 			"Is that so? Dear, take a moment to reflect on what you said. In two days time, how would you like to look at this experience?"
 		],
 		"main": {
-			"opening": [
-				"How are you feeling?"
-			],
-			"res-opening": {
-				"pos": "That’s great to hear. From 1-10, how strong is the emotion you are feeling?",
-				"neg": "That’s unfortunate to hear. From 1-10, how strong is the emotion you are feeling?"
-			},
-			"context": [
-				"The things that happen to us can affect our moods, so talk to me about what was happening when you felt that way?",
-				"The environment and people around us can affect how we feel, tell me what happened?",
-				"What happened when you felt this way?"		
-			],
-			"thought": [
-				"Your thoughts can affect your mood. What were you thinking at the time?",
-				"What thoughts or images went through your mind just before or during that time?"
-			],
-			"response": [
-				"What did you do in response to these thoughts?",
-				"How did you cope with these thoughts?"
-			],
-			"reflection": [
-				[
-					"What you just said needs some reflection. Take a moment to reflect on what you just said.",
-					"Take some time to think about what you said."
-				],
-				[
-					"In two day’s time, how would you like to look at the situation?",
-					"Try to imagine yourself in someone else’s shoes, how do you think they would look at things?",
-					"What do you think is another way someone in your shoes could look at things?"
+			"opening": {
+				"type": "res",
+				"res": {
+					"pos": [
+						"That’s great to hear. From 1-10, how strong is the emotion you are feeling?"
+					],
+					"neg": [
+						"That’s unfortunate to hear. From 1-10, how strong is the emotion you are feeling?"
+					]
+				},
+				"text": [
+					"How are you feeling?"
 				]
-			],
-			"conclusion": [
-				"So, what would be a more thoughtful or helpful way to approach the situation?",
-				"Sometimes we need to take a step back and to understand our situation better. How do you think we can approach it in a more thoughtful way?",
-				"What can you do to change the situation?",
-				"How can you change what you think about the situation that will help you feel better?"
-			],
-			"further-action": [
-				"Is there more you’d like to talk about?"
-			],
-			"res-further-action": {
-				"yes": [
-					"What is it you’d like to talk about more?"
-				],
-				"no": [
-					"Let me know whenever you want to talk. I am here for you.",
-					"Bye for now. But check in with me whenever.",
-					"Let me know how you’re doing tomorrow. Bye for now."
+			},
+			"context": {
+				"type": "n",
+				"text": [
+					"The things that happen to us can affect our moods, so talk to me about what was happening when you felt that way?",
+					"The environment and people around us can affect how we feel, tell me what happened?",
+					"What happened when you felt this way?"	
+				]
+			},
+			"thought": {
+				"type": "n",
+				"text": [
+					"Your thoughts can affect your mood. What were you thinking at the time?",
+					"What thoughts or images went through your mind just before or during that time?"
+				]
+			},
+			"response": {
+				"type": "n",
+				"text": [
+					"What did you do in response to these thoughts?",
+					"How did you cope with these thoughts?"
+				]
+			},
+			"reflection": {
+				"type": "seq",
+				"text": [
+					[
+						"What you just said needs some reflection. Take a moment to reflect on what you just said.",
+						"Take some time to think about what you said."
+					],
+					[
+						"In two day’s time, how would you like to look at the situation?",
+						"Try to imagine yourself in someone else’s shoes, how do you think they would look at things?",
+						"What do you think is another way someone in your shoes could look at things?"
+					]
+				]
+			},
+			"conclusion": {
+				"type": "n",
+				"text": [
+					"So, what would be a more thoughtful or helpful way to approach the situation?",
+					"Sometimes we need to take a step back and to understand our situation better. How do you think we can approach it in a more thoughtful way?",
+					"What can you do to change the situation?",
+					"How can you change what you think about the situation that will help you feel better?"
+				]
+			},
+			"further-action": {
+				"type": "res",
+				"res": {
+					"yes": [
+						"What is it you’d like to talk about more?"
+					],
+					"no": [
+						"Let me know whenever you want to talk. I am here for you.",
+						"Bye for now. But check in with me whenever.",
+						"Let me know how you’re doing tomorrow. Bye for now."
+					]
+				},
+				"text": [
+					"Is there more you’d like to talk about?"
 				]
 			}
 		}
