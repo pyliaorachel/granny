@@ -122,9 +122,9 @@ module.exports = {
   report_const: {
     CONTAINER_PADDING: reportContainerPadding,
     REPORT_TITLE: 'mood analysis of speech',
-    REPORT_TITLE_TODAY: 'your mood over today',
-    REPORT_TITLE_MONTH: 'your mood over this month',
-    REPORT_TITLE_ALL_TIME: 'your mood over all time',
+    REPORT_TITLE_DAY: 'your mood over DAY',
+    REPORT_TITLE_MONTH: 'your mood over MONTH',
+    REPORT_TITLE_YEAR: 'your mood over YEAR',
     DEFAULT_NAVBAR_TITLE: 'Report',
     DEFAULT_DATA: {
       emotions: {

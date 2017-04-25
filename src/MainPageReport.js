@@ -22,6 +22,11 @@ import * as Auth from './utils/db/authentication';
 
 const { DATA_TYPE, CHART_TYPE } = enum_const;
 const ERROR_GRANNY_IMAGE = require('../assets/emotions/surprised.png');
+const TITLE_REPLACE = {
+  [DATA_TYPE.DAY]: 'DAY',
+  [DATA_TYPE.MONTH]: 'MONTH',
+  [DATA_TYPE.YEAR]: 'YEAR',
+};
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -61,14 +66,23 @@ export default class MainPageReport extends Component {
   constructor(props) {
     super(props);
 
-    const dataType = (props.tabLabel === 'Today') ? DATA_TYPE.DAY : 
-                  ((props.tabLabel === 'This Month') ? DATA_TYPE.MONTH : DATA_TYPE.YEAR);
-    const title = (dataType === DATA_TYPE.DAY) ? report_const.REPORT_TITLE_TODAY : 
-                  ((dataType === DATA_TYPE.MONTH) ? report_const.REPORT_TITLE_MONTH : report_const.REPORT_TITLE_ALL_TIME);
+    const dataType = (props.tabLabel === 'Day') ? DATA_TYPE.DAY : 
+                  ((props.tabLabel === 'Month') ? DATA_TYPE.MONTH : DATA_TYPE.YEAR);
+    const title = (dataType === DATA_TYPE.DAY) ? report_const.REPORT_TITLE_DAY : 
+                  ((dataType === DATA_TYPE.MONTH) ? report_const.REPORT_TITLE_MONTH : report_const.REPORT_TITLE_YEAR);
     const chartType = (dataType === DATA_TYPE.DAY) ? CHART_TYPE.PIE : CHART_TYPE.STOCK_LINE;
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     const now = new Date();
+
+    let y, m, d;
+    if (props.date) {
+      const split = props.date.split('-');
+      y = Number(split[0]).toString();
+      m = Number(split[1]).toString();
+      d = Number(split[2]).toString();
+    }
+    console.log('props.date', props.date);
 
     this.state = {
       title: title.toUpperCase(),
@@ -78,9 +92,10 @@ export default class MainPageReport extends Component {
       summaryData: null,
       chartType,
       dataType,
-      y: props.y || now.getFullYear(),
-      m: props.m || now.getMonth() + 1,
-      d: props.d || now.getDate(),
+      y,
+      m,
+      d,
+      date: props.date,
       hasData: false,
       stopSpinning: false,
       UID: props.UID,
@@ -91,6 +106,7 @@ export default class MainPageReport extends Component {
     this.renderReportList = this.renderReportList.bind(this);
     this.retrievedData = this.retrievedData.bind(this);
     this.getData = this.getData.bind(this);
+    this.getReplace = this.getReplace.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -102,6 +118,33 @@ export default class MainPageReport extends Component {
           this.setState({ stopSpinning: true });
         }
       }, timeout_const.RETRIEVE_DATA_TIMEOUT);
+    }
+    if (props.date !== this.state.date) {
+      console.log('props.date', props.date);
+      let y, m, d;
+      if (props.date) {
+        const split = props.date.split('-');
+        y = Number(split[0]).toString();
+        m = Number(split[1]).toString();
+        d = Number(split[2]).toString();
+      }
+      console.log('y, m, d, date', y, m, d, props.date);
+      this.setState({
+        y, m, d, 
+        date: props.date, 
+        stopSpinning: false, hasData: false,
+        dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+        chartData: null,
+        allData: null,
+        summaryData: null, 
+      }, () => {
+        this.getData();
+        setTimeout(() => {
+          if (!this.state.hasData) {
+            this.setState({ stopSpinning: true });
+          }
+        }, timeout_const.RETRIEVE_DATA_TIMEOUT);
+      });
     }
   }
 
@@ -119,6 +162,19 @@ export default class MainPageReport extends Component {
 
     } else{
       this.setState({ stopSpinning: true });
+    }
+  }
+
+  getReplace() {
+    const { date, y, m, d, dataType } = this.state;
+    if (dataType === DATA_TYPE.DAY) {
+      return `DAY ${y}-${m}-${d}`;
+    }
+    if (dataType === DATA_TYPE.MONTH) {
+      return `MONTH ${y}-${m}`;
+    }
+    if (dataType === DATA_TYPE.YEAR) {
+      return `YEAR ${y}`;
     }
   }
 
@@ -229,7 +285,7 @@ export default class MainPageReport extends Component {
             <SubNavBar meta={this.state.summaryData && this.state.summaryData.meta}/>
             <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
               <View style={styles.titleTextContainer}>
-                <Text style={styles.titleText}>{this.state.title}</Text>
+                <Text style={styles.titleText}>{this.state.title.replace(TITLE_REPLACE[this.state.dataType], this.getReplace())}</Text>
               </View>
               {(this.state.chartData) ? this.renderChart() : null}
               {(this.state.allData) ? this.renderReportList() : null}

@@ -45,6 +45,7 @@ export default class NavBar extends Component {
 
     this.settings = this.settings.bind(this);
     this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   handleLeaveButtonClick() {
@@ -55,6 +56,10 @@ export default class NavBar extends Component {
         Actions.popTo('main');
       }
     }
+  }
+
+  handleSearch() {
+    Actions.search();
   }
 
   settings() {
@@ -91,11 +96,20 @@ export default class NavBar extends Component {
               />
             </TouchableHighlight>
           :
-            <Icon
-                name='close'
-                size={35}
-                style={{opacity: 0}}
-            />
+            (this.props.leaveType === navbar_const.type.MAIN) ?
+              <TouchableHighlight style={styles.navBarIconContainer} underlayColor='transparent' onPress={() => {this.handleSearch()}}>
+                <Icon
+                    name='search'
+                    size={35}
+                    style={styles.navBarIconButton}
+                />
+              </TouchableHighlight>
+            :
+              <Icon
+                  name='close'
+                  size={35}
+                  style={{opacity: 0}}
+              />
         }
       </View>
     );

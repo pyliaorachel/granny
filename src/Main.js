@@ -47,21 +47,29 @@ export default class Main extends Component {
   constructor(props) {
     super(props);
 
+    const now = new Date();
+
     this.state = {
       UID: null,
+      date: `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`,
     };
 
     this.startNewRecord = this.startNewRecord.bind(this);
+    this.search = this.search.bind(this);
   }
 
   static renderNavigationBar(props) {
-    return (<NavBar title={props.title} leaveType={navbar_const.type.MAIN} />);
+    return (<NavBar title={props.title} leaveType={navbar_const.type.MAIN} search={Main.search} />);
   }
 
   componentWillReceiveProps(props) {
     if (props.member) {
       console.log('member', member.uid);
       this.setState({ UID: member.uid });
+    }
+    if (props.search) {
+      console.log('search', props.search);
+      this.search(props.search.target, props.search.date);
     }
   }
 
@@ -81,6 +89,11 @@ export default class Main extends Component {
     Actions.room();
   }
 
+  search(target, date) {
+    console.log('search', target, date);
+    this.setState({date});
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -92,9 +105,9 @@ export default class Main extends Component {
           tabBarActiveTextColor='white'
           tabBarInactiveTextColor='rgba(255, 255, 255, 0.8)'
         >
-          <MainPageReport tabLabel='Today' UID={this.state.UID} />
-          <MainPageReport tabLabel='This Month' UID={this.state.UID} />
-          <MainPageReport tabLabel='All Time' UID={this.state.UID} />
+          <MainPageReport tabLabel='Day' UID={this.state.UID} date={this.state.date}/>
+          <MainPageReport tabLabel='Month' UID={this.state.UID} date={this.state.date}/>
+          <MainPageReport tabLabel='Year' UID={this.state.UID} date={this.state.date}/>
         </ScrollableTabView>
         <TouchableHighlight 
           style={styles.startRecordButton}

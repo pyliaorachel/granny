@@ -18,6 +18,7 @@ import * as Auth from './utils/db/authentication';
 import { navbar_const, style_const, granny_const } from './utils/constants';
 import * as colors from './utils/colors';
 import NavBar from './NavBar';
+import * as api from './utils/db/api';
 
 const HAPPY_GRANNY = require('../assets/emotions/happy.png');
 
@@ -81,6 +82,7 @@ export default class Account extends Component {
       .then(() => {
         const member = Auth.getMember();
         if (member) {
+          api.setCreationTime(member.uid);
           Actions.popTo('main');
         }
       })

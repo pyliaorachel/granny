@@ -295,6 +295,21 @@ const uploadJourney = (data) => {
   });
 };
 
+const setCreationTime = (uid) => {
+  const now = new Date();
+  const timeStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+  console.log('set creation', timeStr, uid)
+  db.ref(`user-journals/${uid}`).set({creationTime: timeStr});
+}
+
+const getCreationTime = (cb) => {
+  return userJournals.child('creationTime').once('value')
+    .then((snapshot) => {
+      console.log('creationTime', snapshot.val());
+      return snapshot.val();
+    });
+}
+
 module.exports = {
   setUserID,
   getDayMetaData,
@@ -302,4 +317,6 @@ module.exports = {
   getMonthData,
   getYearData,
   uploadJourney,
+  setCreationTime,
+  getCreationTime,
 };

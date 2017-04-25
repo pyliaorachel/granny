@@ -7,6 +7,7 @@ import Account from './src/Account';
 import Main from './src/Main';
 import Room from './src/Room';
 import Report from './src/Report';
+import Search from './src/Search';
 
 export default class Root extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ export default class Root extends Component {
             <Scene key='room' component={Room}  hideNavBar direction='vertical' />
             <Scene key='report' component={Report} title='Report' direction='vertical' />
             <Scene key='account' component={Account} title='Welcome' direction='vertical' />
+            <Scene key='search' component={Search} title='Search' direction='vertical' />
           </Scene>
         </Scene>
       </Router>
