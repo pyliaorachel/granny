@@ -159,7 +159,7 @@ export default class Room extends Component {
     if (!nextQuestion) { // Granny is not asking a question
       if (data.maxAmplitude < this.state.background * config_const.BG_SCALE) { // scale up for sake
         cummulatedBelowBackground++;
-        if (cummulatedBelowBackground >= config_const.BG_CUMULATE_CNT) { // consider no sound for 3 consecutive seconds as user not talking
+        if (cummulatedBelowBackground >= config_const.BG_CUMULATE_CNT) { // consider no sound for BG_CUMULATE_CNT consecutive seconds as user not talking
           nextQuestion = true;
           cummulatedBelowBackground = 0;
         }
@@ -299,7 +299,7 @@ export default class Room extends Component {
         lastData: this.state.lastData || report_const.DEFAULT_EMOTION_DATA,
         navbarType: navbar_const.type.CLOSE,
         isNewJourney: true,
-        transcript: null, // to be substituted with real data
+        speechText: report_const.DEFAULT_SPEECH_TEXT, // to be substitued with real data
     });
     }, timeout_const.END_TALK_TIMEOUT);
   }

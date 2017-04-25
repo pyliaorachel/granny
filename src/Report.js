@@ -49,7 +49,10 @@ export default class Report extends Component {
     this.state = {
       data: props.data || report_const.DEFAULT_DATA,
       key: props.dataKey,
+      speechText: props.speechText || report_const.DEFAULT_SPEECH_TEXT,
       parsedData: report_const.DEFAULT_PARSED_DATA,
+      keywords: report_const.DEFAULT_KEYWORDS,
+      transcript: report_const.DEFAULT_TRANSCRIPT,
     };
   }
 
@@ -63,12 +66,15 @@ export default class Report extends Component {
     });
 
     if (this.props.isNewJourney) {
-      const { initialData, lastData, data, transcript } = this.props;
+      const { initialData, lastData, data, speechText } = this.props;
+      const { transcript, keywords } = this.state;
       api.uploadJourney({
         initialData: initialData || false, 
         lastData: lastData || false, 
         data: data || false, 
         transcript: transcript || false,
+        keywords: keywords || false,
+        speechText: speechText || false,
       });
     }
   }
@@ -77,8 +83,16 @@ export default class Report extends Component {
     return (<NavBar leaveAction={props.leaveAction} title={props.title} leaveType={props.navbarType} />);
   }
 
+  parseKeywords() {
+
+  }
+
+  parseTranscripts() {
+
+  }
+
   render() {
-    const { parsedData } = this.state;
+    const { parsedData, keywords, speechText, transcript } = this.state;
     const { initialData, lastData, data } = this.props;
     return (
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
@@ -90,6 +104,9 @@ export default class Report extends Component {
           initialData={initialData}
           lastData={lastData}
           data={data}
+          keywords={keywords}
+          speechText={speechText}
+          transcript={transcript}
         />
       </ScrollView>
     );

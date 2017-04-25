@@ -98,18 +98,18 @@ module.exports = {
     }
   },
   interval_const: {
-    CAPTURE_IMAGE_INTERVAL: 3000,
+    CAPTURE_IMAGE_INTERVAL: 30000, // 3000
   },
   timeout_const: {
     END_TALK_TIMEOUT: 3000,
-    OPENING_TIMEOUT: 10000,
+    OPENING_TIMEOUT: 3000, // 10000
     RETRIEVE_DATA_TIMEOUT: 3000,
   },
   config_const: {
     TTS_DEFAULT_RATE: 0.4,
     TTS_DEFAULT_LANG: 'en-US',
     BG_SCALE: 4,
-    BG_CUMULATE_CNT: 3,
+    BG_CUMULATE_CNT: 0, // 3
     AUDIO_FILE_PATH: '/dev/null',
     AUDIO_OPTIONS: {
       SampleRate: 22050,
@@ -126,7 +126,6 @@ module.exports = {
     REPORT_TITLE_MONTH: 'your mood over this month',
     REPORT_TITLE_ALL_TIME: 'your mood over all time',
     DEFAULT_NAVBAR_TITLE: 'Report',
-    DEFUALT_SPEECH_TEXT: 'This is default speech textThis is default speech textThis is default speech textThis is default speech text',
     DEFAULT_DATA: {
       emotions: {
         happiness: 0.5,
@@ -154,6 +153,59 @@ module.exports = {
       disgust: 0.05,
       neutral: 0.00,
     },
+    DEFAULT_SPEECH_TEXT: "The group project I'm working on really disgusted me. I want to suicide. Of course I'm kidding, I went to the park instead. Let it go. Let it go. Probably thinking about those groupmates failing in the future makes me more comfortable. I love you Granny!",
+    DEFAULT_KEYWORDS: [
+      {
+        "text": "suicide",
+        "emotion": "anger"
+      },
+      {
+        "text": "group project",
+        "emotion": "disgust"
+      },
+      {
+        "text": "park",
+        "emotion": "happiness"
+      }
+    ],
+    DEFAULT_TRANSCRIPT: [
+      {
+        "answer" : "Umm...",
+        "questionID" : 0
+      },
+      {
+        "answer" : "10",
+        "questionID" : 1
+      },
+      {
+        "answer" : "The group project I'm working on really disgusted me.",
+        "questionID" : 2
+      },
+      {
+        "answer" : "I want to suicide.",
+        "questionID" : 3
+      },
+      {
+        "answer" : "Of course I'm kidding, I went to the park instead.",
+        "questionID" : 4
+      },
+      {
+        "answer" : "Let it go. Let it go.",
+        "questionID" : 5
+      },
+      {
+        "answer" : "Probably thinking about those groupmates failing in the future makes me more comfortable.",
+        "questionID" : 4
+      },
+      {
+        "answer" : "Yes",
+        "questionID" : 9
+      },
+      {
+        "answer" : "I love you Granny!",
+        "questionID" : 10
+      } 
+    ],
     DEFAULT_MONTH_DATA: [
       'happiness', 'sadness', 'anger', 'neutral', 
       'surprise', 'sadness', 'disgust', 'happiness', 
