@@ -98,18 +98,18 @@ module.exports = {
     }
   },
   interval_const: {
-    CAPTURE_IMAGE_INTERVAL: 30000, // 3000
+    CAPTURE_IMAGE_INTERVAL: 3000, 
   },
   timeout_const: {
     END_TALK_TIMEOUT: 3000,
-    OPENING_TIMEOUT: 3000, // 10000
+    OPENING_TIMEOUT: 10000, 
     RETRIEVE_DATA_TIMEOUT: 3000,
   },
   config_const: {
     TTS_DEFAULT_RATE: 0.4,
     TTS_DEFAULT_LANG: 'en-US',
     BG_SCALE: 4,
-    BG_CUMULATE_CNT: 0, // 3
+    BG_CUMULATE_CNT: 3,
     AUDIO_FILE_PATH: '/dev/null',
     AUDIO_OPTIONS: {
       SampleRate: 22050,

@@ -131,7 +131,7 @@ export default class Search extends Component {
           >
             <Text style={styles.btnText}>Search Date Entries</Text>
           </TouchableOpacity>
-          <Text style={styles.info}>Pick any date in a month.</Text>
+          {/*<Text style={styles.info}>Pick any date in a month.</Text>
           <TouchableOpacity
               style={styles.btn}
               onPress={() => {
@@ -150,7 +150,7 @@ export default class Search extends Component {
               }}
           >
             <Text style={styles.btnText}>Search Year Trend</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
       </TouchableWithoutFeedback>
     );
